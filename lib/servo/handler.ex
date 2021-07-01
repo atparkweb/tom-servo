@@ -5,8 +5,16 @@ defmodule Servo.Handler do
     |> log
     |> rewrite_path
     |> route
+    |> trace
     |> format_response
   end
+  
+  def trace(%{ status: 404, path: path } = req) do
+    IO.puts "Warning: undefined path: #{path}"
+    req
+  end
+  
+  def trace(req), do: req
   
   def rewrite_path(%{ path: "/robots" } = req) do
     %{ req | path: "/bots" }
@@ -35,7 +43,7 @@ defmodule Servo.Handler do
     %{ req | status: 200, resp_body: Enum.join(bots, "\n") }
   end
 
-  def route(%{ method: "GET", path: "/bots" <> id } = req) do
+  def route(%{ method: "GET", path: "/bot/" <> id } = req) do
     %{ req | status: 200, resp_body: "Bot #{id}" }
   end
 
@@ -72,13 +80,13 @@ end
 
 requests = %{
 bots: """
-GET /robots HTTP/1.1
+GET /bots HTTP/1.1
 Host: example.com
 User-Agent: ExampleBrowser/1.0
 Accept: */*
 
 """, bot: """
-GET /bots/66 HTTP/1.1
+GET /bot/66 HTTP/1.1
 Host: example.com
 User-Agent: ExampleBrowser/1.0
 Accept: */*
