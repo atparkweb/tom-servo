@@ -28,6 +28,10 @@ defmodule Servo.Handler do
     %{ req | status: 200, resp_body: Enum.join(bots, "\n") }
   end
 
+  def route(%{ method: "GET", path: "/bots" <> id } = req) do
+    %{ req | status: 200, resp_body: "Bot #{id}" }
+  end
+
   def route(%{ method: "GET", path: "/sirs" } = req) do
     sirs = ["Dr. Clayton Brown", "TV's Frank"]
     %{ req | status: 200, resp_body: Enum.join(sirs, "\n")}
@@ -59,14 +63,31 @@ defmodule Servo.Handler do
   end
 end
 
-request = """
+requests = %{
+bots: """
+GET /bots HTTP/1.1
+Host: example.com
+User-Agent: ExampleBrowser/1.0
+Accept: */*
+
+""", bot: """
+GET /bots/66 HTTP/1.1
+Host: example.com
+User-Agent: ExampleBrowser/1.0
+Accept: */*
+
+""", sirs: """
 GET /sirs HTTP/1.1
 Host: example.com
 User-Agent: ExampleBrowser/1.0
 Accept: */*
 
 """
+}
 
-response = Servo.Handler.handle(request)
+responses =
+  Map.values(requests)
+  |> Enum.map(fn r -> Servo.Handler.handle(r) end)
+  |> Enum.join("\n============\n")
 
-IO.puts response
+IO.puts "\n==========\n" <> responses
