@@ -3,9 +3,16 @@ defmodule Servo.Handler do
     req
     |> parse
     |> log
+    |> rewrite_path
     |> route
     |> format_response
   end
+  
+  def rewrite_path(%{ path: "/robots" } = req) do
+    %{ req | path: "/bots" }
+  end
+  
+  def rewrite_path(req), do: req
   
   def log(req), do: IO.inspect req
   
@@ -65,7 +72,7 @@ end
 
 requests = %{
 bots: """
-GET /bots HTTP/1.1
+GET /robots HTTP/1.1
 Host: example.com
 User-Agent: ExampleBrowser/1.0
 Accept: */*
