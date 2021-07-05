@@ -59,13 +59,6 @@ defmodule Servo.Handler do
   end
   
   # Routes
-  def route(%{ method: "GET", path: "/bots/new" } = req) do
-    Path.expand("../../pages", __DIR__)
-    |> Path.join("form.html")
-    |> File.read
-    |> handle_file(req)
-  end
-
   def route(%{ method: "GET", path: "/bots" } = req) do
     bots = ["Cambot", "Gypsy", "Tom Servo", "Croooooow"]
     %{ req | status: 200, resp_body: Enum.join(bots, "\n") }
@@ -80,9 +73,9 @@ defmodule Servo.Handler do
     %{ req | status: 200, resp_body: Enum.join(sirs, "\n")}
   end
 
-  def route(%{ method: "GET", path: "/home"} = req) do
+  def route(%{ method: "GET", path: "/pages/" <> page } = req) do
     Path.expand("../../pages", __DIR__)
-    |> Path.join("home.html")
+    |> Path.join("#{page}.html")
     |> File.read
     |> handle_file(req)
   end
@@ -143,7 +136,7 @@ User-Agent: ExampleBrowser/1.0
 Accept: */*
 
 """, new_bot: """
-GET /bots/new HTTP/1.1
+GET /pages/new HTTP/1.1
 Host: example.com
 User-Agent: ExampleBrowser/1.0
 Accept: */*
@@ -173,7 +166,7 @@ User-Agent: ExampleBrowser/1.0
 Accept: */*
 
 """, page_req: """
-GET /home HTTP/1.1
+GET /pages/home HTTP/1.1
 Host: example.com
 User-Agent: ExampleBrowser/1.0
 Accept: */*
