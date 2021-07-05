@@ -24,16 +24,16 @@ defmodule Servo.Handler do
   # Routes
   def route(%{ method: "GET", path: "/bots" } = req) do
     bots = ["Cambot", "Gypsy", "Tom Servo", "Croooooow"]
-    %{ req | status: 200, resp_body: Enum.join(bots, "\n") }
+    %{ req | status: 200, res_body: Enum.join(bots, "\n") }
   end
 
   def route(%{ method: "GET", path: "/bots" <> id } = req) do
-    %{ req | status: 200, resp_body: "Bot #{id}" }
+    %{ req | status: 200, res_body: "Bot #{id}" }
   end
   
   def route(%{ method: "GET", path: "/sirs" } = req) do
     sirs = ["Dr. Clayton Brown", "TV's Frank"]
-    %{ req | status: 200, resp_body: Enum.join(sirs, "\n")}
+    %{ req | status: 200, res_body: Enum.join(sirs, "\n")}
   end
 
   def route(%{ method: "GET", path: "/pages/" <> page } = req) do
@@ -44,20 +44,20 @@ defmodule Servo.Handler do
   end
 
   def route(%{ method: "DELETE" } = req) do
-    %{ req | status: 403, resp_body: "Delete operations are not authorized"}
+    %{ req | status: 403, res_body: "Delete operations are not authorized"}
   end
 
   def route(%{ method: method, path: path } = req) do
-    %{ req | status: 404, resp_body: "Cannot #{method} route #{path}" }
+    %{ req | status: 404, res_body: "Cannot #{method} route #{path}" }
   end
   
-  def format_response(%{ status: status, resp_body: resp_body }) do
+  def format_response(%{ status: status, res_body: res_body }) do
     """
     HTTP/1.1 #{status} #{status_desc(status)}
     Content-Type: text/html
-    Content-Length: #{String.length(resp_body)} 
+    Content-Length: #{String.length(res_body)} 
 
-    #{resp_body}
+    #{res_body}
     """
   end
   

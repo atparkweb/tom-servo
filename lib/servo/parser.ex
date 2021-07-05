@@ -8,7 +8,7 @@ defmodule Servo.Parser do
 
     %{ method: method,
        path: path,
-       resp_body: "",
+       res_body: "",
        status: nil }
   end
 end

@@ -37,7 +37,7 @@ defmodule Servo.Utils do
 
   @doc "Adds an emoji to the response body based on the response status code."
   def emojify(%{ status: status } = req) do
-    %{ req | resp_body: "#{status_icon(status)}\n" <> req.resp_body }
+    %{ req | res_body: "#{status_icon(status)}\n" <> req.res_body }
   end
   
 end
