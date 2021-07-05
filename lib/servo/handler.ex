@@ -1,6 +1,15 @@
 defmodule Servo.Handler do
-  require Logger
+  
+  @moduledoc "Handles HTTP requests."
 
+  # Attributes
+  @pages_path Path.expand("../../pages", __DIR__)
+  
+  import Servo.Utils, only: [ emojify: 1, log: 1, rewrite_path: 1, trace: 1 ]
+  import Servo.Parser, only: [ parse: 1 ]
+  import Servo.FileHandler, only: [ handle_file: 2 ]
+
+  @doc "Transfroms request into a response."
   def handle(req) do
     req
     |> parse
@@ -10,52 +19,6 @@ defmodule Servo.Handler do
     |> emojify
     |> trace
     |> format_response
-  end
-  
-  def trace(%{ status: 404, path: path } = req) do
-    Logger.warn("Warning: undefined path: #{path}")
-    req
-  end
-  
-  def trace(req), do: req
-  
-  def rewrite_path(%{ path: path } = req) do
-    regex = ~r{\/(?<name>\w+)\?id=(?<id>\d+)}
-    captures = Regex.named_captures(regex, path)
-    rewrite_path_captures(req, captures)
-  end
-  
-  def rewrite_path(req), do: req
-  
-  def rewrite_path_captures(req, %{ "name" => name, "id" => id }) do
-    %{ req | path: "/#{name}/#{id}" }
-  end
-  def rewrite_path_captures(req, nil), do: req
-  
-  defp status_icon(200), do: "✅ "
-  defp status_icon(201), do: "✅ "
-  defp status_icon(_), do: "⛔ "
-
-  def emojify(%{ status: status } = req) do
-    %{ req | resp_body: "#{status_icon(status)}\n" <> req.resp_body }
-  end
-  
-  def log(req) do
-    Logger.info(req)
-    req
-  end
-  
-  def parse(req) do
-    [method, path, _] =
-      req
-        |> String.split("\n")
-        |> List.first
-        |> String.split(" ")
-
-    %{ method: method,
-       path: path,
-       resp_body: "",
-       status: nil }
   end
   
   # Routes
@@ -74,7 +37,7 @@ defmodule Servo.Handler do
   end
 
   def route(%{ method: "GET", path: "/pages/" <> page } = req) do
-    Path.expand("../../pages", __DIR__)
+    @pages_path
     |> Path.join("#{page}.html")
     |> File.read
     |> handle_file(req)
@@ -86,18 +49,6 @@ defmodule Servo.Handler do
 
   def route(%{ method: method, path: path } = req) do
     %{ req | status: 404, resp_body: "Cannot #{method} route #{path}" }
-  end
-  
-  def handle_file({:ok, content}, req) do
-    %{ req | status: 200, resp_body: content }
-  end
-  
-  def handle_file({:error, :enoent}, req) do
-    %{ req | status: 404, resp_body: "File not found!" }
-  end
-  
-  def handle_file({:error, reason}, req) do
-    %{ req | status: 500, resp_body: "File error: #{reason}" }
   end
   
   def format_response(%{ status: status, resp_body: resp_body }) do
