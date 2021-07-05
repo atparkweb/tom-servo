@@ -59,15 +59,22 @@ defmodule Servo.Handler do
   end
   
   # Routes
+  def route(%{ method: "GET", path: "/bots/new" } = req) do
+    Path.expand("../../pages", __DIR__)
+    |> Path.join("form.html")
+    |> File.read
+    |> handle_file(req)
+  end
+
   def route(%{ method: "GET", path: "/bots" } = req) do
     bots = ["Cambot", "Gypsy", "Tom Servo", "Croooooow"]
     %{ req | status: 200, resp_body: Enum.join(bots, "\n") }
   end
 
-  def route(%{ method: "GET", path: "/bot/" <> id } = req) do
+  def route(%{ method: "GET", path: "/bots" <> id } = req) do
     %{ req | status: 200, resp_body: "Bot #{id}" }
   end
-
+  
   def route(%{ method: "GET", path: "/sirs" } = req) do
     sirs = ["Dr. Clayton Brown", "TV's Frank"]
     %{ req | status: 200, resp_body: Enum.join(sirs, "\n")}
@@ -80,7 +87,6 @@ defmodule Servo.Handler do
     |> handle_file(req)
   end
 
-  
   def route(%{ method: "DELETE" } = req) do
     %{ req | status: 403, resp_body: "Delete operations are not authorized"}
   end
@@ -131,13 +137,19 @@ User-Agent: ExampleBrowser/1.0
 Accept: */*
 
 """, bot: """
-GET /bot/42 HTTP/1.1
+GET /bots/42 HTTP/1.1
+Host: example.com
+User-Agent: ExampleBrowser/1.0
+Accept: */*
+
+""", new_bot: """
+GET /bots/new HTTP/1.1
 Host: example.com
 User-Agent: ExampleBrowser/1.0
 Accept: */*
 
 """, rewrite: """
-GET /bot?id=43 HTTP/1.1
+GET /bots?id=43 HTTP/1.1
 Host: example.com
 User-Agent: ExampleBrowser/1.0
 Accept: */*
@@ -160,7 +172,20 @@ Host: example.com
 User-Agent: ExampleBrowser/1.0
 Accept: */*
 
+""", page_req: """
+GET /home HTTP/1.1
+Host: example.com
+User-Agent: ExampleBrowser/1.0
+Accept: */*
+
+""", form_req: """
+GET /bots/new HTTP/1.1
+Host: example.com
+User-Agent: ExampleBrowser/1.0
+Accept: */*
+
 """
+
 }
 
 responses =
@@ -169,15 +194,3 @@ responses =
   |> Enum.join("\n============\n")
 
 IO.puts "\n==========\n" <> responses
-
-pageReq = """
-GET /home HTTP/1.1
-Host: example.com
-User-Agent: ExampleBrowser/1.0
-Accept: */*
-
-"""
-
-response2 = Servo.Handler.handle(pageReq)
-
-IO.puts response2
