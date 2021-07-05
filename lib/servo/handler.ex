@@ -72,6 +72,14 @@ defmodule Servo.Handler do
     sirs = ["Dr. Clayton Brown", "TV's Frank"]
     %{ req | status: 200, resp_body: Enum.join(sirs, "\n")}
   end
+
+  def route(%{ method: "GET", path: "/home"} = req) do
+    Path.expand("../../pages", __DIR__)
+    |> Path.join("home.html")
+    |> File.read
+    |> handle_file(req)
+  end
+
   
   def route(%{ method: "DELETE" } = req) do
     %{ req | status: 403, resp_body: "Delete operations are not authorized"}
@@ -79,6 +87,18 @@ defmodule Servo.Handler do
 
   def route(%{ method: method, path: path } = req) do
     %{ req | status: 404, resp_body: "Cannot #{method} route #{path}" }
+  end
+  
+  def handle_file({:ok, content}, req) do
+    %{ req | status: 200, resp_body: content }
+  end
+  
+  def handle_file({:error, :enoent}, req) do
+    %{ req | status: 404, resp_body: "File not found!" }
+  end
+  
+  def handle_file({:error, reason}, req) do
+    %{ req | status: 500, resp_body: "File error: #{reason}" }
   end
   
   def format_response(%{ status: status, resp_body: resp_body }) do
@@ -149,3 +169,15 @@ responses =
   |> Enum.join("\n============\n")
 
 IO.puts "\n==========\n" <> responses
+
+pageReq = """
+GET /home HTTP/1.1
+Host: example.com
+User-Agent: ExampleBrowser/1.0
+Accept: */*
+
+"""
+
+response2 = Servo.Handler.handle(pageReq)
+
+IO.puts response2
