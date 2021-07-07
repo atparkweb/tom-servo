@@ -53,26 +53,16 @@ defmodule Servo.Handler do
     %Request{ req | status: 404, res_body: "Cannot #{method} route #{path}" }
   end
   
-  def format_response(%Request{ status: status, res_body: res_body }) do
+  def format_response(%Request{} = req) do
     """
-    HTTP/1.1 #{status} #{status_desc(status)}
+    HTTP/1.1 #{Request.full_status(req)}
     Content-Type: text/html
-    Content-Length: #{String.length(res_body)} 
+    Content-Length: #{String.length(req.res_body)} 
 
-    #{res_body}
+    #{req.res_body}
     """
   end
   
-  defp status_desc(code) do
-    %{
-      200 => "OK",
-      201 => "Created",
-      401 => "Unauthorized",
-      403 => "Forbidden",
-      404 => "Not Found",
-      500 => "Internal Server Error"
-    }[code]
-  end
 end
 
 requests = %{
