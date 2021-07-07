@@ -8,6 +8,8 @@ defmodule Servo.Handler do
   import Servo.Utils, only: [ emojify: 1, log: 1, rewrite_path: 1, trace: 1 ]
   import Servo.Parser, only: [ parse: 1 ]
   import Servo.FileHandler, only: [ handle_file: 2 ]
+  
+  alias Servo.Request
 
   @doc "Transfroms request into a response."
   def handle(req) do
@@ -22,36 +24,36 @@ defmodule Servo.Handler do
   end
   
   # Routes
-  def route(%{ method: "GET", path: "/bots" } = req) do
+  def route(%Request{ method: "GET", path: "/bots" } = req) do
     bots = ["Cambot", "Gypsy", "Tom Servo", "Croooooow"]
-    %{ req | status: 200, res_body: Enum.join(bots, "\n") }
+    %Request{ req | status: 200, res_body: Enum.join(bots, "\n") }
   end
 
-  def route(%{ method: "GET", path: "/bots" <> id } = req) do
-    %{ req | status: 200, res_body: "Bot #{id}" }
+  def route(%Request{ method: "GET", path: "/bots" <> id } = req) do
+    %Request{ req | status: 200, res_body: "Bot #{id}" }
   end
   
-  def route(%{ method: "GET", path: "/sirs" } = req) do
+  def route(%Request{ method: "GET", path: "/sirs" } = req) do
     sirs = ["Dr. Clayton Brown", "TV's Frank"]
-    %{ req | status: 200, res_body: Enum.join(sirs, "\n")}
+    %Request{ req | status: 200, res_body: Enum.join(sirs, "\n")}
   end
 
-  def route(%{ method: "GET", path: "/pages/" <> page } = req) do
+  def route(%Request{ method: "GET", path: "/pages/" <> page } = req) do
     @pages_path
     |> Path.join("#{page}.html")
     |> File.read
     |> handle_file(req)
   end
 
-  def route(%{ method: "DELETE" } = req) do
-    %{ req | status: 403, res_body: "Delete operations are not authorized"}
+  def route(%Request{ method: "DELETE" } = req) do
+    %Request{ req | status: 403, res_body: "Delete operations are not authorized"}
   end
 
-  def route(%{ method: method, path: path } = req) do
-    %{ req | status: 404, res_body: "Cannot #{method} route #{path}" }
+  def route(%Request{ method: method, path: path } = req) do
+    %Request{ req | status: 404, res_body: "Cannot #{method} route #{path}" }
   end
   
-  def format_response(%{ status: status, res_body: res_body }) do
+  def format_response(%Request{ status: status, res_body: res_body }) do
     """
     HTTP/1.1 #{status} #{status_desc(status)}
     Content-Type: text/html

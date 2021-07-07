@@ -1,4 +1,6 @@
 defmodule Servo.Parser do
+  alias Servo.Request
+
   def parse(req) do
     [method, path, _] =
       req
@@ -6,9 +8,9 @@ defmodule Servo.Parser do
         |> List.first
         |> String.split(" ")
 
-    %{ method: method,
-       path: path,
-       res_body: "",
-       status: nil }
+    %Request{
+      method: method,
+      path: path,
+    }
   end
 end
