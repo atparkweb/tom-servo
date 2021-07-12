@@ -2,12 +2,11 @@ defmodule Servo.Request do
   @moduledoc """
     Struct representing HTTP request/response object
   """
-  defstruct [
-    method: "",
-    path: "",
-    res_body: "",
-    status: nil
-  ]
+  defstruct method: "",
+            params: %{},
+	    path: "",
+	    res_body: "",
+	    status: nil
   
   def full_status(req) do
     "#{req.status} #{status_desc(req.status)}"

@@ -44,6 +44,11 @@ defmodule Servo.Handler do
     |> File.read
     |> handle_file(req)
   end
+  
+  # name=R2D2&type=Astro
+  def route(%Request{ method: "POST", path: "/bots" } = req) do
+    %{ req | status: 201, res_body: "Created a #{req.params["type"]} bot named #{req.params["name"]}" }
+  end
 
   def route(%Request{ method: "DELETE" } = req) do
     %Request{ req | status: 403, res_body: "Delete operations are not authorized"}
@@ -120,13 +125,25 @@ Host: example.com
 User-Agent: ExampleBrowser/1.0
 Accept: */*
 
-"""
+""", post_req: """
+POST /bots HTTP/1.1
+Host: example.com
+User-Agent: ExampleBrowser/1.0
+Accept: */*
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 21
 
+name=R2D2&type=Astro
+"""
 }
 
-responses =
-  Map.values(requests)
-  |> Enum.map(fn r -> Servo.Handler.handle(r) end)
-  |> Enum.join("\n============\n")
+# do all requests
+# responses =
+#   Map.values(requests)
+#   |> Enum.map(fn r -> Servo.Handler.handle(r) end)
+#   |> Enum.join("\n============\n")
 
-IO.puts "\n==========\n" <> responses
+# IO.puts "\n==========\n" <> responses
+
+response = Servo.Handler.handle(requests.post_req)
+IO.puts response
