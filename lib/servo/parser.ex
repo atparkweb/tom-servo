@@ -25,7 +25,7 @@ defmodule Servo.Parser do
   def parse_headers([h | t], headers) do
     [key, value] = String.split(h, ":")
     headers = Map.put(headers, key, value)
-    parse_headers(t)
+    parse_headers(t, headers)
   end
   
   def parse_headers([], headers), do: headers
