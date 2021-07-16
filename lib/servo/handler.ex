@@ -10,6 +10,7 @@ defmodule Servo.Handler do
   import Servo.FileHandler, only: [ handle_file: 2 ]
   
   alias Servo.Request
+  alias Servo.BotController
 
   @doc "Transfroms request into a response."
   def handle(req) do
@@ -25,12 +26,12 @@ defmodule Servo.Handler do
   
   # Routes
   def route(%Request{ method: "GET", path: "/bots" } = req) do
-    bots = ["Cambot", "Gypsy", "Tom Servo", "Croooooow"]
-    %Request{ req | status: 200, res_body: Enum.join(bots, "\n") }
+    BotController.index(req)
   end
 
   def route(%Request{ method: "GET", path: "/bots" <> id } = req) do
-    %Request{ req | status: 200, res_body: "Bot #{id}" }
+    params = Map.put(req.params, "id", id)
+    BotController.show(req, params)
   end
   
   def route(%Request{ method: "GET", path: "/sirs" } = req) do
@@ -137,13 +138,5 @@ name=R2D2&type=Astro
 """
 }
 
-# do all requests
-# responses =
-#   Map.values(requests)
-#   |> Enum.map(fn r -> Servo.Handler.handle(r) end)
-#   |> Enum.join("\n============\n")
-
-# IO.puts "\n==========\n" <> responses
-
-response = Servo.Handler.handle(requests.post_req)
+response = Servo.Handler.handle(requests.form_req)
 IO.puts response
