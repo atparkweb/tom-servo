@@ -30,9 +30,9 @@ defmodule Servo.Parser do
   
   def parse_headers([], headers), do: headers
   
-  def parse_params(_, _), do: %{}
-  
   def parse_params("application/x-www-form-urlencoded", params_string) do
     params_string |> String.trim |> URI.decode_query
   end
+
+  def parse_params(_, _), do: %{}
 end
