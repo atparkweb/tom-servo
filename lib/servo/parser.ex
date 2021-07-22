@@ -1,6 +1,33 @@
 defmodule Servo.Parser do
+  @moduledoc """
+  Example HTTP Request:
+
+
+  """
+
   alias Servo.Request
 
+  @doc """
+  Convert HTTP Request string to a Request struct
+  
+  Returns: `%Request{}`
+  
+  ## Examples
+  
+       iex> Servo.Parser.parse('''
+              GET /bots HTTP/1.1
+              Host: example.com
+              User-Agent: ExampleBrowser/1.0
+              Accept: */*
+            ''')
+       %Request{
+         method: "Get",
+         path: "/bots",
+         params: %{},
+         headers: %{ "Host" => "example.com", "User-Agent" => "ExampleBrowser/1.0", "Accept" => "*/*" }
+       }
+
+  """
   def parse(request) do
     # Separate request body from headers
     [head, body] = String.split(request, "\n\n")

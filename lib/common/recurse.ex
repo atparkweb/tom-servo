@@ -1,4 +1,17 @@
 defmodule Common.Recurse do
+  @moduledoc """
+  Simple recursive looping examples
+  """
+  
+  @doc """
+  Sum a list of integers
+  
+  ## Examples
+  
+       iex> Common.Recurse.sum([1, 2, 3])
+       6
+
+  """
   def sum(xs) do
     sum_(xs, 0)
   end
@@ -9,7 +22,17 @@ defmodule Common.Recurse do
 
   defp sum_([], total), do: total
   
-
+  @doc """
+  Triple each integer in a list and return a new list
+  
+  ## Examples
+  
+       iex> triple([1, 2, 3])
+       [3, 6, 9]
+       
+       iex> triple([10, 20, 30])
+       [30, 60, 90]
+  """
   def triple(xs) do
     triple_(xs, [])
   end
