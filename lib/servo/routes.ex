@@ -36,7 +36,7 @@ defmodule Servo.Routes do
     BotController.index(req)
   end
 
-  def route(%Request{ method: "GET", path: "/bots" <> id } = req) do
+  def route(%Request{ method: "GET", path: "/bots/" <> id } = req) do
     params = Map.put(req.params, "id", id)
     BotController.show(req, params)
   end
@@ -54,7 +54,7 @@ defmodule Servo.Routes do
   end
   
   def route(%Request{ method: "POST", path: "/bots" } = req) do
-    %{ req | status: 201, res_body: "Created a #{req.params["type"]} bot named #{req.params["name"]}" }
+    BotController.create(req, req.params)
   end
 
   def route(%Request{ method: "DELETE" } = req) do
