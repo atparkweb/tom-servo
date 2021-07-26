@@ -2,7 +2,7 @@ defmodule Servo.BotController do
   alias Servo.Bot
   alias Servo.BotStore
   alias Servo.Request
-  
+
   defp bot_item(bot) do
     "<li>#{bot.name} - #{bot.color}</li>"
   end
@@ -14,20 +14,20 @@ defmodule Servo.BotController do
       |> Enum.sort(&Bot.order_by_name_asc/2) # sort alphabetically by name
       |> Enum.map(&bot_item/1)
       |> Enum.join("\n")
-    
+
     %Request{ req | status: 200, res_body: "<ul>\n#{items}\n</ul>" }
   end
-  
+
   def show(req, %{ "id" => id }) do
     bot = BotStore.get_bot(id)
     %Request{ req | status: 200, res_body: "Bot #{bot.name} (#{bot.color})" }
   end
-  
+
   def create(req, %{ "name" => name, "type" => type }) do
     # Mock success response. Nothing is created
     %Request{ req | status: 201, res_body: "Created a #{type} bot named #{name}" }
   end
-  
+
   def delete(req, _params) do
     %Request{ req | status: 403, res_body: "Removing a bot is not allowed" }
   end
