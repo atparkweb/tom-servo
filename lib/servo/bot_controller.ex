@@ -24,6 +24,11 @@ defmodule Servo.BotController do
   end
   
   def create(req, %{ "name" => name, "type" => type }) do
+    # Mock success response. Nothing is created
     %Request{ req | status: 201, res_body: "Created a #{type} bot named #{name}" }
+  end
+  
+  def delete(req, _params) do
+    %Request{ req | status: 403, res_body: "Removing a bot is not allowed" }
   end
 end
