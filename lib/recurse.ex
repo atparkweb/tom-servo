@@ -1,4 +1,4 @@
-defmodule Common.Recurse do
+defmodule Recurse do
   @moduledoc """
   Simple recursive looping examples
   """
@@ -8,7 +8,7 @@ defmodule Common.Recurse do
   
   ## Examples
   
-       iex> Common.Recurse.sum([1, 2, 3])
+       iex> Recurse.sum([1, 2, 3])
        6
 
   """
@@ -27,10 +27,10 @@ defmodule Common.Recurse do
   
   ## Examples
   
-       iex> triple([1, 2, 3])
+       iex> Recurse.triple([1, 2, 3])
        [3, 6, 9]
        
-       iex> triple([10, 20, 30])
+       iex> Recurse.triple([10, 20, 30])
        [30, 60, 90]
   """
   def triple(xs) do
