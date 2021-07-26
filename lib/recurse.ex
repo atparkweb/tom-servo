@@ -13,14 +13,14 @@ defmodule Recurse do
 
   """
   def sum(xs) do
-    sum_(xs, 0)
+    sum_r(xs, 0)
   end
   
-  defp sum_([h | t], total) do
-    sum_(t, h + total)
+  defp sum_r([h | t], total) do
+    sum_r(t, h + total)
   end
 
-  defp sum_([], total), do: total
+  defp sum_r([], total), do: total
   
   @doc """
   Triple each integer in a list and return a new list
@@ -34,12 +34,22 @@ defmodule Recurse do
        [30, 60, 90]
   """
   def triple(xs) do
-    triple_(xs, [])
+    triple_r(xs, [])
   end
   
-  defp triple_([h | t], result) do
-    triple_(t, [h * 3 | result])
+  defp triple_r([h | t], result) do
+    triple_r(t, [h * 3 | result])
   end
   
-  defp triple_([], result), do: result |> Enum.reverse
+  defp triple_r([], result), do: result |> Enum.reverse
+  
+  def my_map(xs, iterator) do
+    my_map_r(xs, iterator, [])
+  end
+  
+  defp my_map_r([h | t], iterator, result) do
+    my_map_r(t, iterator, [iterator.(h) | result])
+  end
+
+  defp my_map_r([], _, result), do: result |> Enum.reverse
 end
