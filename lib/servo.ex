@@ -62,6 +62,18 @@ defmodule Servo do
 
     IO.puts Handler.handle(req)
   end
+
+  def remove_bot(id) do
+    req = """
+    DELETE /bots/#{id} HTTP/1.1
+    Host: example.com
+    User-Agent: ExampleBrowser/1.0
+    Accept: */*
+
+    """
+
+    IO.puts Handler.handle(req)
+  end
   
   def all_humans do
     req = """
