@@ -1,0 +1,7 @@
+<h1>Show Bot</h1>
+
+<p>
+  ID: <%= bot.id %>
+  Name: <%= bot.name %>
+  Color: <%= bot.color %>
+</p>

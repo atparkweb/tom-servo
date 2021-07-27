@@ -1,0 +1,7 @@
+<h1>Robot Roll Call!</h1>
+
+<ul>
+  <%= for bot <- bots do %>
+    <li><%= bot.name %> is <%= bot.color %></li>
+  <% end %>
+</ul>
