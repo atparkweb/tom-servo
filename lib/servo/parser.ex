@@ -12,21 +12,6 @@ defmodule Servo.Parser do
   
   Returns: `%Request{}`
   
-  ## Examples
-  
-       iex> Servo.Parser.parse('''
-              GET /bots HTTP/1.1
-              Host: example.com
-              User-Agent: ExampleBrowser/1.0
-              Accept: */*
-            ''')
-       %Request{
-         method: "Get",
-         path: "/bots",
-         params: %{},
-         headers: %{ "Host" => "example.com", "User-Agent" => "ExampleBrowser/1.0", "Accept" => "*/*" }
-       }
-
   """
   def parse(request) do
     # Separate request body from headers
@@ -37,7 +22,7 @@ defmodule Servo.Parser do
 
     [method, path, _] = String.split(request_line, " ")
     
-    headers = parse_headers(header_lines, %{})
+    headers = parse_headers(header_lines)
 
     params = parse_params(headers["Content-Type"], body)
 
@@ -49,13 +34,12 @@ defmodule Servo.Parser do
     }
   end
   
-  def parse_headers([h | t], headers) do
-    [key, value] = String.split(h, ":")
-    headers = Map.put(headers, key, value)
-    parse_headers(t, headers)
+  def parse_headers(header_lines) do
+    Enum.reduce(header_lines, %{}, fn(line, headers) ->
+      [key, value] = String.split(line, ":")
+      Map.put(headers, key, value)
+    end)
   end
-  
-  def parse_headers([], headers), do: headers
   
   def parse_params("application/x-www-form-urlencoded", params_string) do
     params_string |> String.trim |> URI.decode_query
