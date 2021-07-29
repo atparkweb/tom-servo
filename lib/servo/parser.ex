@@ -37,7 +37,7 @@ defmodule Servo.Parser do
   def parse_headers(header_lines) do
     Enum.reduce(header_lines, %{}, fn(line, headers) ->
       [key, value] = String.split(line, ":")
-      Map.put(headers, key, value)
+      Map.put(headers, key, String.trim(value))
     end)
   end
   
