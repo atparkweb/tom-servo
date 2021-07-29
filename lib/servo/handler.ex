@@ -23,10 +23,10 @@ defmodule Servo.Handler do
   
   def format_response(%Request{} = req) do
     """
-    HTTP/1.1 #{Request.full_status(req)}
-    Content-Type: text/html
-    Content-Length: #{String.length(req.res_body)} 
-
+    HTTP/1.1 #{Request.full_status(req)}\r
+    Content-Type: text/html\r
+    Content-Length: #{String.length(req.res_body)}\r
+    \r
     #{req.res_body}
     """
   end

@@ -31,6 +31,10 @@ defmodule Servo.Routes do
 
   alias Servo.BotController
   alias Servo.Request
+  
+  def route(%Request{ method: "GET", path: "/bot_crew" } = req) do
+    %Request{ req | status: 200, res_body: "Cambot, Gypsy, Tom Servo, Crow"}
+  end
 
   def route(%Request{ method: "GET", path: "/bots" } = req) do
     BotController.index(req)

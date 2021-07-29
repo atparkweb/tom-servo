@@ -15,10 +15,10 @@ defmodule Servo.Parser do
   """
   def parse(request) do
     # Separate request body from headers
-    [head, body] = String.split(request, "\n\n")
+    [head, body] = String.split(request, "\r\n\r\n")
     
     # Separate request headers from request method line
-    [request_line | header_lines] = String.split(head, "\n")
+    [request_line | header_lines] = String.split(head, "\r\n")
 
     [method, path, _] = String.split(request_line, " ")
     
@@ -41,6 +41,17 @@ defmodule Servo.Parser do
     end)
   end
   
+  @doc """
+  Parses a param string of the form `key1=value1&key2=value2`
+  into a map with corresponding keys and values.
+  
+  ## Examples
+      iex> params_string = "name=C3PO&color=Gold"
+      iex> Servo.Parser.parse_params("application/x-www-form-urlencoded", params_string)
+      %{ "name" => "C3PO", "color" => "Gold" }
+      iex> Servo.Parser.parse_params("multipart/form-data", params_string)
+      %{}
+  """
   def parse_params("application/x-www-form-urlencoded", params_string) do
     params_string |> String.trim |> URI.decode_query
   end

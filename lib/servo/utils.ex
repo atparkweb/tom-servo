@@ -38,13 +38,13 @@ defmodule Servo.Utils do
   defp rewrite_path_captures(%Request{} = req, nil), do: req
 
   
-  defp status_icon(200), do: "✅ "
-  defp status_icon(201), do: "✅ "
-  defp status_icon(_), do: "⛔ "
+  defp status_icon(200), do: "✅"
+  defp status_icon(201), do: "✅"
+  defp status_icon(_), do: "⛔"
 
   @doc "Adds an emoji to the response body based on the response status code."
   def emojify(%Request{ status: status } = req) do
-    %Request{ req | res_body: "#{status_icon(status)}\n" <> req.res_body }
+    %Request{ req | res_body: "#{status_icon(status)}\r\n" <> req.res_body }
   end
   
 end
