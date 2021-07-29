@@ -2,7 +2,7 @@ defmodule ServoTest do
   use ExUnit.Case
   doctest Servo
 
-  test "greets the world" do
-    assert Servo.hello("Joel") == "Hello, Joel!"
+  test "the truth" do
+    assert 1 + 1 == 2
   end
 end
