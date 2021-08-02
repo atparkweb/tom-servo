@@ -2,6 +2,6 @@
 
 <ul>
   <%= for bot <- bots do %>
-    <li><%= bot.name %> is <%= bot.color %></li>
+  <li><%= bot.name %> is <%= bot.color %></li>
   <% end %>
 </ul>
