@@ -55,5 +55,9 @@ defmodule Servo.Utils do
     headers = Map.put(req.res_headers, "Content-Type", type)
     %{ req | res_headers: headers }
   end
-
+  
+  def put_content_length(req) do
+    headers = Map.put(req.res_headers, "Content-Length", String.length(req.res_body))
+    %{ req | res_headers: headers }
+  end
 end
