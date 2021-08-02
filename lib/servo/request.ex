@@ -13,7 +13,7 @@ defmodule Servo.Request do
   def full_status(req) do
     "#{req.status} #{status_desc(req.status)}"
   end
-
+  
   defp status_desc(code) do
     %{
       200 => "OK",

@@ -51,4 +51,9 @@ defmodule Servo.Utils do
     %Request{ req | res_body: "#{status_icon(status)}\r\n" <> req.res_body }
   end
   
+  def put_res_content_type(req, type) do
+    headers = Map.put(req.res_headers, "Content-Type", type)
+    %{ req | res_headers: headers }
+  end
+
 end
