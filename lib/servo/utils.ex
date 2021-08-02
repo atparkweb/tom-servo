@@ -16,7 +16,9 @@ defmodule Servo.Utils do
 
   @doc "Logs 404 requests"
   def trace(%Request{ status: 404, path: path } = req) do
-    Logger.warn("Warning: undefined path: #{path}")
+    if Mix.env != :test do
+      Logger.warn("Warning: undefined path: #{path}")
+    end
     req
   end
 
