@@ -1,10 +1,10 @@
-defmodule Servo.BotStore do
+defmodule Servo.Resources.BotStore do
   @moduledoc """
   Mock data store to test with. To be replaced with backing service
 
   """
 
-  alias Servo.Bot
+  alias Servo.Resources.Bot
   
   @doc """
   Get a list of all the Bots

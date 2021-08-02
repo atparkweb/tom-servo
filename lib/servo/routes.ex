@@ -26,7 +26,8 @@ defmodule Servo.Routes do
 
   import Servo.FileHandler, only: [ handle_file: 2 ]
 
-  alias Servo.BotController
+  alias Servo.Controllers.BotController
+  alias Servo.Controllers.BotApiController
   alias Servo.Request
   
   def route(%Request{ method: "GET", path: "/bot_crew" } = req) do
@@ -38,7 +39,7 @@ defmodule Servo.Routes do
   end
 
   def route(%Request{ method: "GET", path: "/api/bots" } = req) do
-    Servo.Api.BotController.index(req)
+    BotApiController.index(req)
   end
 
   def route(%Request{ method: "GET", path: "/bots/" <> id } = req) do

@@ -1,7 +1,7 @@
-defmodule Servo.Api.BotController do
+defmodule Servo.Controllers.BotApiController do
   def index(req) do
     json =
-      Servo.BotStore.list_bots()
+      Servo.Resources.BotStore.list_bots()
       |> Poison.encode!
     
     %{ req | status: 200, res_content_type: "application/json", res_body: json }

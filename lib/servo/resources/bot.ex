@@ -1,4 +1,4 @@
-defmodule Servo.Bot do
+defmodule Servo.Resources.Bot do
   defstruct id: nil, name: "", color: "", is_active: true
   
   def order_by_name_asc(bot1, bot2) do

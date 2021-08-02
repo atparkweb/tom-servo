@@ -1,7 +1,6 @@
-defmodule Servo.BotController do
-  alias Servo.Bot
-  alias Servo.BotStore
-  alias Servo.BotView
+defmodule Servo.Controllers.BotController do
+  alias Servo.Resources.BotStore
+  alias Servo.Views.BotView
   alias Servo.Request
   
   def index(req) do
