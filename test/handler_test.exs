@@ -106,6 +106,27 @@ defmodule HandlerTest do
     """
   end
 
+  test "DELETE /bots/1" do
+    request = """
+    DELETE /bots/1 HTTP/1.1\r
+    HOST: example.com\r
+    User-Agent: ExampleBrowser/1.0\r
+    Accept: */*\r
+    \r
+    """
+    
+    response = handle(request)
+    
+    assert response == """
+    HTTP/1.1 403 Forbidden\r
+    Content-Type: text/html\r
+    Content-Length: 31\r
+    \r
+    ⛔\r
+    Removing a bot is not allowed
+    """
+  end
+
   test "GET /pages/home" do
     request = """
     GET /pages/home HTTP/1.1\r
