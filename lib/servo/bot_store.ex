@@ -11,10 +11,10 @@ defmodule Servo.BotStore do
   """
   def list_bots do
     [
-      %Bot{ id: 1, name: "Cambot", color: "Orange"},
-      %Bot{ id: 2, name: "Gypsy", color: "Purple"},
-      %Bot{ id: 3, name: "Tom Servo", color: "Red"},
-      %Bot{ id: 4, name: "Crow", color: "Yellow"}
+      %Bot{ id: 1, name: "Cambot", color: "orange"},
+      %Bot{ id: 2, name: "Gypsy", color: "purple"},
+      %Bot{ id: 3, name: "Tom Servo", color: "red"},
+      %Bot{ id: 4, name: "Crow", color: "yellow"}
     ]
   end
   

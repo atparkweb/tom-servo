@@ -44,11 +44,39 @@ defmodule HandlerTest do
     <h1>Robot Roll Call!</h1>
 
     <ul>
-      <li>Cambot is Orange</li>
-      <li>Gypsy is Purple</li>
-      <li>Tom Servo is Red</li>
-      <li>Crow is Yellow</li>
+      <li>Cambot is orange</li>
+      <li>Gypsy is purple</li>
+      <li>Tom Servo is red</li>
+      <li>Crow is yellow</li>
     </ul>
+    """
+
+    assert remove_whitespace(response) == remove_whitespace(expected_response)
+  end
+  
+  test "GET /api/bots" do
+    request = """
+    GET /api/bots HTTP/1.1\r
+    HOST: example.com\r
+    User-Agent: ExampleBrowser/1.0\r
+    Accept: */*\r
+    \r
+    """
+
+    response = handle(request)
+
+    expected_response = """
+    HTTP/1.1 200 OK\r
+    Content-Type: application/json\r
+    Content-Length: 236\r
+    \r
+    ✅\r
+    [
+      { \"name\": \"Cambot\", \"is_active\": true, \"id\": 1, \"color\": \"orange\" },
+      { \"name\": \"Gypsy\", \"is_active\": true, \"id\": 2, \"color\": \"purple\" },
+      { \"name\": \"Tom Servo\", \"is_active\": true, \"id\": 3, \"color\": \"red\" },
+      { \"name\": \"Crow\", \"is_active\": true, \"id\": 4, \"color\": \"yellow\" }
+    ]
     """
 
     assert remove_whitespace(response) == remove_whitespace(expected_response)
@@ -76,7 +104,7 @@ defmodule HandlerTest do
     <p>
       ID: 1
       Name: Cambot
-      Color: Orange
+      Color: orange
     </p>
     """
     
