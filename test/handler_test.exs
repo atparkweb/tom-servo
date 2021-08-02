@@ -83,6 +83,28 @@ defmodule HandlerTest do
     assert remove_whitespace(response) == remove_whitespace(expected_response)
   end
 
+  test "GET /pages/home" do
+    request = """
+    GET /pages/home HTTP/1.1\r
+    HOST: example.com\r
+    User-Agent: ExampleBrowser/1.0\r
+    Accept: */*\r
+    \r
+    """
+
+    response = handle(request)
+
+    expected_response = """
+    HTTP/1.1 200 OK\r
+    Content-Type: text/html\r
+    Content-Length: 34\r
+    \r
+    ✅\r
+    <h1>Welcome to my homepage</h1>
+    """
+    
+    assert remove_whitespace(response) == remove_whitespace(expected_response)
+  end
   defp remove_whitespace(str) do
     String.replace(str, ~r{\s}, "")
   end
