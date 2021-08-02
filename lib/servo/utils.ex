@@ -7,7 +7,9 @@ defmodule Servo.Utils do
 
   @doc "Uses Logger module to print requests."
   def log(%Request{} = req) do
-    Logger.info(req)
+    if Mix.env == :dev do
+      Logger.info(req)
+    end
     req
   end
 
