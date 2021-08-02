@@ -58,7 +58,7 @@ defmodule Servo.Routes do
     BotController.delete(req, params)
   end
 
-  def route(%Request{ method: "DELETE" } = req) do
-    %Request{ req | status: 403, res_body: "Delete operations are not authorized"}
+  def route(%Request{ method: method, path: path } = req) do
+    %Request{ req | status: 404, res_body: "Cannot #{method} route #{path}" }
   end
 end
