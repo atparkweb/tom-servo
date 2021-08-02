@@ -35,23 +35,26 @@ defmodule HandlerTest do
 
     response = handle(request)
 
-   expected_response = """
-   HTTP/1.1 200 OK\r
-   Content-Type: text/html\r
-   Content-Length: 164\r
-   \r
-   ✅\r
-   <h1>Robot Roll Call!</h1>
+    expected_response = """
+    HTTP/1.1 200 OK\r
+    Content-Type: text/html\r
+    Content-Length: 164\r
+    \r
+    ✅\r
+    <h1>Robot Roll Call!</h1>
 
-   <ul>
-     <li>Cambot is Orange</li>
-     <li>Gypsy is Purple</li>
-     <li>Tom Servo is Red</li>
-     <li>Crow is Yellow</li>
-   </ul>
-   """
+    <ul>
+      <li>Cambot is Orange</li>
+      <li>Gypsy is Purple</li>
+      <li>Tom Servo is Red</li>
+      <li>Crow is Yellow</li>
+    </ul>
+    """
 
-   assert remove_whitespace(response) == remove_whitespace(expected_response)
+    assert remove_whitespace(response) == remove_whitespace(expected_response)
+  end
+  
+  test "GET /bots/:id" do
   end
 
   defp remove_whitespace(str) do
