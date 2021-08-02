@@ -83,6 +83,29 @@ defmodule HandlerTest do
     assert remove_whitespace(response) == remove_whitespace(expected_response)
   end
 
+  test "POST /bots" do
+    request = """
+    POST /bots HTTP/1.1\r
+    HOST: example.com\r
+    User-Agent: ExampleBrowser/1.0\r
+    Content-Type: application/x-www-form-urlencoded\r
+    Accept: */*\r
+    \r
+    name=C3PO&color=gold
+    """
+    
+    response = handle(request)
+    
+    assert response == """
+    HTTP/1.1 201 Created\r
+    Content-Type: text/html\r
+    Content-Length: 31\r
+    \r
+    ✅\r
+    Created a gold bot named C3PO
+    """
+  end
+
   test "GET /pages/home" do
     request = """
     GET /pages/home HTTP/1.1\r
