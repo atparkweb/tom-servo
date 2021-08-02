@@ -10,9 +10,6 @@ defmodule Servo.Routes do
   ### GET /bots/:id
   Get a single bot by :id
   
-  ### GET /humans
-  Get a list of all humans
-
   ### GET /pages/:name
   Get an HTML page by name
 
@@ -45,11 +42,6 @@ defmodule Servo.Routes do
     BotController.show(req, params)
   end
   
-  def route(%Request{ method: "GET", path: "/humans" } = req) do
-    sirs = ["Joel", "Mike", "Dr. Clayton Brown", "TV's Frank"]
-    %Request{ req | status: 200, res_body: Enum.join(sirs, "\n")}
-  end
-
   def route(%Request{ method: "GET", path: "/pages/" <> page } = req) do
     @pages_path
     |> Path.join("#{page}.html")
