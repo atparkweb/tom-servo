@@ -34,6 +34,14 @@ defmodule Servo.Parser do
     }
   end
   
+  @doc """
+  Converts HTTP header lines to a Map
+  
+  ## Examples
+      iex> header_lines = ["Host: example.com", "User-Agent: ExampleBrowser/1.0"]
+      iex> Servo.Parser.parse_headers(header_lines)
+      %{ "Host" => "example.com", "User-Agent" => "ExampleBrowser/1.0" }
+  """
   def parse_headers(header_lines) do
     Enum.reduce(header_lines, %{}, fn(line, headers) ->
       [key, value] = String.split(line, ":")
