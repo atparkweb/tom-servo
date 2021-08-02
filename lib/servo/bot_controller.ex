@@ -8,7 +8,6 @@ defmodule Servo.BotController do
     bot_list =
       BotStore.list_bots
       |> Enum.filter(fn(b) -> b.is_active end)
-      |> Enum.sort(&Bot.order_by_name_asc/2) # sort alphabetically by name
 
     # render(req, "index.eex", bots: bot_list)
     %Request{ req | status: 200, res_body: BotView.index(bot_list) }
