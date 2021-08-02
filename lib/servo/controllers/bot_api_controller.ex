@@ -4,6 +4,8 @@ defmodule Servo.Controllers.BotApiController do
       Servo.Resources.BotStore.list_bots()
       |> Poison.encode!
     
-    %{ req | status: 200, res_content_type: "application/json", res_body: json }
+    new_headers = Map.put(req.res_headers, "Content-Type", "application/json")
+    
+    %{ req | status: 200, res_headers: new_headers, res_body: json }
   end
 end

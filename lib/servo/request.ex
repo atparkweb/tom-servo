@@ -6,7 +6,7 @@ defmodule Servo.Request do
             method: "",
             params: %{},
 	    path: "",
-            res_content_type: "text/html", # TODO: make this general res_headers map
+            res_headers: %{"Content-Type" => "text/html"},
 	    res_body: "",
 	    status: nil
   
