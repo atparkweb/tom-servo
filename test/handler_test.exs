@@ -55,6 +55,32 @@ defmodule HandlerTest do
   end
   
   test "GET /bots/:id" do
+    request = """
+    GET /bots/1 HTTP/1.1\r
+    HOST: example.com\r
+    User-Agent: ExampleBrowser/1.0\r
+    Accept: */*\r
+    \r
+    """
+
+    response = handle(request)
+
+    expected_response = """
+    HTTP/1.1 200 OK\r
+    Content-Type: text/html\r
+    Content-Length: 69\r
+    \r
+    ✅\r
+    <h1>Show Bot</h1>
+
+    <p>
+      ID: 1
+      Name: Cambot
+      Color: Orange
+    </p>
+    """
+    
+    assert remove_whitespace(response) == remove_whitespace(expected_response)
   end
 
   defp remove_whitespace(str) do
