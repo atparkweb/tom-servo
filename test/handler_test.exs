@@ -54,34 +54,6 @@ defmodule HandlerTest do
     assert remove_whitespace(response) == remove_whitespace(expected_response)
   end
   
-  test "GET /api/bots" do
-    request = """
-    GET /api/bots HTTP/1.1\r
-    HOST: example.com\r
-    User-Agent: ExampleBrowser/1.0\r
-    Accept: */*\r
-    \r
-    """
-
-    response = handle(request)
-
-    expected_response = """
-    HTTP/1.1 200 OK\r
-    Content-Type: application/json\r
-    Content-Length: 236\r
-    \r
-    ✅\r
-    [
-      { \"name\": \"Cambot\", \"is_active\": true, \"id\": 1, \"color\": \"orange\" },
-      { \"name\": \"Gypsy\", \"is_active\": true, \"id\": 2, \"color\": \"purple\" },
-      { \"name\": \"Tom Servo\", \"is_active\": true, \"id\": 3, \"color\": \"red\" },
-      { \"name\": \"Crow\", \"is_active\": true, \"id\": 4, \"color\": \"yellow\" }
-    ]
-    """
-
-    assert remove_whitespace(response) == remove_whitespace(expected_response)
-  end
-  
   test "GET /bots/:id" do
     request = """
     GET /bots/1 HTTP/1.1\r
@@ -154,6 +126,61 @@ defmodule HandlerTest do
     Removing a bot is not allowed
     """
   end
+
+  test "GET /api/bots" do
+    request = """
+    GET /api/bots HTTP/1.1\r
+    HOST: example.com\r
+    User-Agent: ExampleBrowser/1.0\r
+    Accept: */*\r
+    \r
+    """
+
+    response = handle(request)
+
+    expected_response = """
+    HTTP/1.1 200 OK\r
+    Content-Type: application/json\r
+    Content-Length: 236\r
+    \r
+    ✅\r
+    [
+      { \"name\": \"Cambot\", \"is_active\": true, \"id\": 1, \"color\": \"orange\" },
+      { \"name\": \"Gypsy\", \"is_active\": true, \"id\": 2, \"color\": \"purple\" },
+      { \"name\": \"Tom Servo\", \"is_active\": true, \"id\": 3, \"color\": \"red\" },
+      { \"name\": \"Crow\", \"is_active\": true, \"id\": 4, \"color\": \"yellow\" }
+    ]
+    """
+
+    assert remove_whitespace(response) == remove_whitespace(expected_response)
+  end
+  
+  test "POST /api/bots" do
+    request = """
+    POST /api/bots HTTP/1.1\r
+    HOST: example.com\r
+    User-Agent: ExampleBrowser/1.0\r
+    Accept: */*\r
+    Content-Type: application/json\r
+    Content-Length: 21\r
+    \r
+    {"name": "R2D2", "color": "blue"}
+    """
+
+    response = handle(request)
+
+    expected_response = """
+    HTTP/1.1 201 Created\r
+    Content-Type: application/json\r
+    Content-Length: 42\r
+    \r
+    ✅\r
+    Created a bot named R2D2 with color blue
+    """
+
+    assert response == expected_response
+  end
+  
 
   test "GET /pages/home" do
     request = """
