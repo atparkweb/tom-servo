@@ -19,6 +19,12 @@ defmodule Servo.Routes do
   Parameter example: name=R2D2&type=Astro
 
   DELETE requests are denied
+  
+  ### GET /api/bots
+  Get list of bots as JSON data
+  
+  ### POST /api/bots
+  Create a new bot by sending JSON
   """
 
   # Attributes
@@ -36,10 +42,6 @@ defmodule Servo.Routes do
 
   def route(%Request{ method: "GET", path: "/bots" } = req) do
     BotController.index(req)
-  end
-
-  def route(%Request{ method: "GET", path: "/api/bots" } = req) do
-    BotApiController.index(req)
   end
 
   def route(%Request{ method: "GET", path: "/bots/" <> id } = req) do
@@ -61,6 +63,14 @@ defmodule Servo.Routes do
   def route(%Request{ method: "DELETE", path: "/bots/" <> id } = req) do
     params = Map.put(req.params, "id", id)
     BotController.delete(req, params)
+  end
+
+  def route(%Request{ method: "GET", path: "/api/bots" } = req) do
+    BotApiController.index(req)
+  end
+
+  def route(%Request{ method: "POST", path: "/api/bots" } = req) do
+    BotApiController.create(req, req.params)
   end
 
   def route(%Request{ method: method, path: path } = req) do
