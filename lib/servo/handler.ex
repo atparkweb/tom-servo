@@ -21,12 +21,16 @@ defmodule Servo.Handler do
     |> format_response
   end
   
+  defp format_response_headers(req) do
+    for {key, val} <- req.res_headers do
+      "#{key}: #{val}\r"
+    end |> Enum.sort |> Enum.reverse |> Enum.join("\n")
+  end
   
   def format_response(%Request{} = req) do
     """
     HTTP/1.1 #{Request.full_status(req)}\r
-    Content-Type: #{req.res_headers["Content-Type"]}\r
-    Content-Length: #{req.res_headers["Content-Length"]}\r
+    #{format_response_headers(req)}
     \r
     #{req.res_body}
     """
