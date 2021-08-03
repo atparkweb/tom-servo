@@ -54,14 +54,21 @@ defmodule Servo.Parser do
   into a map with corresponding keys and values.
   
   ## Examples
-      iex> params_string = "name=C3PO&color=Gold"
+      iex> params_string = "name=C3PO&color=gold"
       iex> Servo.Parser.parse_params("application/x-www-form-urlencoded", params_string)
-      %{ "name" => "C3PO", "color" => "Gold" }
+      %{ "name" => "C3PO", "color" => "gold" }
       iex> Servo.Parser.parse_params("multipart/form-data", params_string)
       %{}
+      iex> params_string = ~s({"name": "C3PO", "color": "gold"})
+      iex> Servo.Parser.parse_params("application/json", params_string)
+      %{ "name" => "C3PO", "color" => "gold" }
   """
   def parse_params("application/x-www-form-urlencoded", params_string) do
     params_string |> String.trim |> URI.decode_query
+  end
+
+  def parse_params("application/json", params_string) do
+    Poison.Parser.parse!(params_string)
   end
 
   def parse_params(_, _), do: %{}
