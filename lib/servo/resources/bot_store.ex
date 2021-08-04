@@ -10,12 +10,21 @@ defmodule Servo.Resources.BotStore do
   Get a list of all the Bots
   """
   def list_bots do
-    [
-      %Bot{ id: 1, name: "Cambot", color: "orange"},
-      %Bot{ id: 2, name: "Gypsy", color: "purple"},
-      %Bot{ id: 3, name: "Tom Servo", color: "red"},
-      %Bot{ id: 4, name: "Crow", color: "yellow"}
-    ]
+    Path.expand("../../../db", __DIR__)
+    |> Path.join("bots.json")
+    |> read_json
+    |> Poison.decode!(as: %{"bots" => [%Bot{}]})
+    |> Map.get("bots")
+  end
+  
+  defp read_json(source) do
+    case File.read(source) do
+      {:ok, contents} ->
+        contents
+      {:error, reason} ->
+        IO.inspect "Error reading #{source}: #{reason}"
+	"[]"
+    end
   end
   
   @doc """
