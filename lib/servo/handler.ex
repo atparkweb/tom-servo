@@ -3,7 +3,7 @@ defmodule Servo.Handler do
   @moduledoc "Handles HTTP requests."
 
   import Servo.Routes, only: [ route: 1 ]
-  import Servo.Utils, only: [ emojify: 1, log: 1, put_content_length: 1, rewrite_path: 1, trace: 1 ]
+  import Servo.Utils, only: [ log: 1, put_content_length: 1, rewrite_path: 1, trace: 1 ]
   import Servo.Parser, only: [ parse: 1 ]
   
   alias Servo.Request
@@ -15,7 +15,6 @@ defmodule Servo.Handler do
     |> log
     |> rewrite_path
     |> route
-    |> emojify
     |> trace
     |> put_content_length
     |> format_response
