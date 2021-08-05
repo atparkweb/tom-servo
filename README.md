@@ -1,5 +1,4 @@
 # Tom Servo
-
 A very simple server written in Elixir
 
 ## Installation
