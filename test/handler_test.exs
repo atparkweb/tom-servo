@@ -38,7 +38,7 @@ defmodule HandlerTest do
     expected_response = """
     HTTP/1.1 200 OK\r
     Content-Type: text/html\r
-    Content-Length: 164\r
+    Content-Length: 191\r
     \r
     ✅\r
     <h1>Robot Roll Call!</h1>
@@ -48,6 +48,7 @@ defmodule HandlerTest do
       <li>Gypsy is purple</li>
       <li>Tom Servo is red</li>
       <li>Crow is yellow</li>
+      <li>C3PO is gold</li>
     </ul>
     """
 
@@ -141,14 +142,15 @@ defmodule HandlerTest do
     expected_response = """
     HTTP/1.1 200 OK\r
     Content-Type: application/json\r
-    Content-Length: 236\r
+    Content-Length: 291\r
     \r
     ✅\r
     [
       { \"name\": \"Cambot\", \"is_active\": true, \"id\": 1, \"color\": \"orange\" },
       { \"name\": \"Gypsy\", \"is_active\": true, \"id\": 2, \"color\": \"purple\" },
       { \"name\": \"Tom Servo\", \"is_active\": true, \"id\": 3, \"color\": \"red\" },
-      { \"name\": \"Crow\", \"is_active\": true, \"id\": 4, \"color\": \"yellow\" }
+      { \"name\": \"Crow\", \"is_active\": true, \"id\": 4, \"color\": \"yellow\" },
+      { \"name\": \"C3PO\", \"is_active\": true, \"id\": 5, \"color\": \"gold\" }
     ]
     """
 

@@ -3,6 +3,7 @@
       { "id": 1, "name": "Cambot", "color": "orange"},
       { "id": 2, "name": "Gypsy", "color": "purple"},
       { "id": 3, "name": "Tom Servo", "color": "red"},
-      { "id": 4, "name": "Crow", "color": "yellow"}
+      { "id": 4, "name": "Crow", "color": "yellow"},
+      { "id": 5, "name": "C3PO", "color": "gold"}
     ]
 }
