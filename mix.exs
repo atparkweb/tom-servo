@@ -6,8 +6,13 @@ defmodule Servo.MixProject do
       app: :servo,
       version: "0.1.0",
       elixir: "~> 1.12",
+      build_embedded: Mix.env == :prod,
       start_permanent: Mix.env() == :prod,
-      deps: deps()
+      description: description(),
+      package: package(),
+      deps: deps(),
+      name: "Tom Servo",
+      source_url: "https://github.com/atparkweb/tom-servo"
     ]
   end
 
@@ -24,6 +29,18 @@ defmodule Servo.MixProject do
       { :ex_doc, "~> 0.24", only: :dev, runtime: false },
       { :poison, "~> 5.0" }
       # {:dep_from_git, git: "https://github.com/elixir-lang/my_dep.git", tag: "0.1.0"}
+    ]
+  end
+  
+  defp description do
+    "An example of a simple HTTP server built from scratch with Elixir."
+  end
+  
+  defp package do
+    [
+      name: "atparkweb_servo",
+      licenses: ["Apache-2.0"],
+      links: %{ "Github" => "https://github.com/atparkweb/tom-servo"}
     ]
   end
 end
