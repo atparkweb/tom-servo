@@ -1,4 +1,4 @@
-# Erlang version:
+# Erlang:
 # server() ->
 #   {ok, LSock} = gen_tcp:listen(5678, [binary, {packet, 0},
 # 				      active, false}]),
@@ -6,16 +6,6 @@
 #   {ok, Bin} = do_recv(Sock, []),
 #   ok = gen_tcp:close(Sock),
 #   Bin.
-
-# Elixir version:
-# def server do
-#   {:ok, lsock} = :gen_tcp.listen(5678, [:binary, packet: 0, active: false])
-#   {:ok, sock} = :gen_tcp.accept(lsock)
-#   {:ok, bin} = :gen_tcp.recv(sock, 0)
-#   # send response
-#   :ok = :gen_tcp.close(sock)
-#   bin
-# end
 
 defmodule Servo.HttpServer do
   
