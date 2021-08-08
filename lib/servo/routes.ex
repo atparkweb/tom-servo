@@ -11,7 +11,7 @@ defmodule Servo.Routes do
   Get a single bot by :id
   
   ### GET /pages/:name
-  Get an HTML page by name
+  Get a page by name
 
   ### POST /bots
   Create a new bot by sending parameters
@@ -30,7 +30,7 @@ defmodule Servo.Routes do
   # Attributes
   @pages_path Path.expand("../../pages", __DIR__)
 
-  import Servo.FileHandler, only: [ handle_file: 2 ]
+  import Servo.FileHandler, only: [ handle_file: 2, markdown_to_html: 1 ]
 
   alias Servo.Controllers.BotController
   alias Servo.Controllers.BotApiController
@@ -51,9 +51,10 @@ defmodule Servo.Routes do
   
   def route(%Request{ method: "GET", path: "/pages/" <> page } = req) do
     @pages_path
-    |> Path.join("#{page}.html")
+    |> Path.join("#{page}.md")
     |> File.read
     |> handle_file(req)
+    |> markdown_to_html
   end
   
   def route(%Request{ method: "POST", path: "/bots" } = req) do

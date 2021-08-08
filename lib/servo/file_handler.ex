@@ -13,4 +13,10 @@ defmodule Servo.FileHandler do
     %Request{ req | status: 500, res_body: "File error: #{reason}" }
   end
   
+  def markdown_to_html(%Request{status: 200} = req) do
+    {:ok, content, _} = Earmark.as_html(req.res_body)
+    %{ req | res_body: content }
+  end
+  
+  def markdown_to_html(%Request{} = req), do: req
 end

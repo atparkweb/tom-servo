@@ -17,9 +17,8 @@ defmodule HandlerTest do
     assert response == """
     HTTP/1.1 200 OK\r
     Content-Type: text/html\r
-    Content-Length: 32\r
+    Content-Length: 30\r
     \r
-    ✅\r
     Cambot, Gypsy, Tom Servo, Crow
     """
   end
@@ -38,9 +37,8 @@ defmodule HandlerTest do
     expected_response = """
     HTTP/1.1 200 OK\r
     Content-Type: text/html\r
-    Content-Length: 191\r
+    Content-Length: 189\r
     \r
-    ✅\r
     <h1>Robot Roll Call!</h1>
 
     <ul>
@@ -69,9 +67,8 @@ defmodule HandlerTest do
     expected_response = """
     HTTP/1.1 200 OK\r
     Content-Type: text/html\r
-    Content-Length: 69\r
+    Content-Length: 67\r
     \r
-    ✅\r
     <h1>Show Bot</h1>
 
     <p>
@@ -100,9 +97,8 @@ defmodule HandlerTest do
     assert response == """
     HTTP/1.1 201 Created\r
     Content-Type: text/html\r
-    Content-Length: 31\r
+    Content-Length: 29\r
     \r
-    ✅\r
     Created a gold bot named C3PO
     """
   end
@@ -121,9 +117,8 @@ defmodule HandlerTest do
     assert response == """
     HTTP/1.1 403 Forbidden\r
     Content-Type: text/html\r
-    Content-Length: 31\r
+    Content-Length: 29\r
     \r
-    ⛔\r
     Removing a bot is not allowed
     """
   end
@@ -142,9 +137,8 @@ defmodule HandlerTest do
     expected_response = """
     HTTP/1.1 200 OK\r
     Content-Type: application/json\r
-    Content-Length: 291\r
+    Content-Length: 289\r
     \r
-    ✅\r
     [
       { \"name\": \"Cambot\", \"is_active\": true, \"id\": 1, \"color\": \"orange\" },
       { \"name\": \"Gypsy\", \"is_active\": true, \"id\": 2, \"color\": \"purple\" },
@@ -174,9 +168,8 @@ defmodule HandlerTest do
     expected_response = """
     HTTP/1.1 201 Created\r
     Content-Type: application/json\r
-    Content-Length: 42\r
+    Content-Length: 40\r
     \r
-    ✅\r
     Created a bot named R2D2 with color blue
     """
 
@@ -198,39 +191,9 @@ defmodule HandlerTest do
     expected_response = """
     HTTP/1.1 200 OK\r
     Content-Type: text/html\r
-    Content-Length: 34\r
+    Content-Length: 33\r
     \r
-    ✅\r
     <h1>Welcome to my homepage</h1>
-    """
-    
-    assert remove_whitespace(response) == remove_whitespace(expected_response)
-  end
-
-  test "GET /pages/new" do
-    request = """
-    GET /pages/new HTTP/1.1\r
-    HOST: example.com\r
-    User-Agent: ExampleBrowser/1.0\r
-    Accept: */*\r
-    \r
-    """
-
-    response = handle(request)
-
-    expected_response = """
-    HTTP/1.1 200 OK\r
-    Content-Type: text/html\r
-    Content-Length: 154\r
-    \r
-    ✅\r
-    <form action="/bots" method="POST">
-      <label>
-        Name: 
-        <input type="text" name="name">
-      </label>
-      <input type="submit" value="Add Bot">
-    </form>
     """
     
     assert remove_whitespace(response) == remove_whitespace(expected_response)
