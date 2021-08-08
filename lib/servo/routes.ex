@@ -57,6 +57,10 @@ defmodule Servo.Routes do
     |> markdown_to_html
   end
   
+  def route(%Request{ method: "GET", path: "/" } = req) do
+    route(%Request{ req | path: "/pages/home" })
+  end
+  
   def route(%Request{ method: "POST", path: "/bots" } = req) do
     BotController.create(req, req.params)
   end
