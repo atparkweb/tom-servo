@@ -20,10 +20,7 @@ defmodule Servo.HttpServer do
     accept_loop(listen_socket)
   end
 
-  @doc """
-  Accepts client connections on the `listen_socket`.
-  """
-  def accept_loop(listen_socket) do
+  defp accept_loop(listen_socket) do
     IO.puts " Waiting to accept a client connection...\n"
     
     # Suspends (blocks) and waits for a client connection.
@@ -33,7 +30,7 @@ defmodule Servo.HttpServer do
     IO.puts " Connection accepted!\n"
     
     # Receives the request and sends a response over the client socket.
-    serve(client_socket)
+    spawn(fn -> serve(client_socket) end)
     
     # Loop back to wait and accept the next connection.
     accept_loop(listen_socket)
@@ -43,6 +40,7 @@ defmodule Servo.HttpServer do
   Receives the request on the `client_socket` and sends a response back over the same socket.
   """
   def serve(client_socket) do
+    IO.puts "#{inspect self()}: Working..."
     client_socket
     |> read_request
     |> Servo.Handler.handle

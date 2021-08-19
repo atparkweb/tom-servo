@@ -3,6 +3,12 @@ defmodule Servo.Routes do
   REST Routes. Delegate action to Controller
   
   ## Routes:
+  
+  ### GET /kaboom
+  Simulate an exception generating request
+
+  ### GET /sleep/:time
+  Simulate a long running request to demonstrate concurrency
 
   ### GET /bots
   Get a list of all bots
@@ -36,6 +42,17 @@ defmodule Servo.Routes do
   alias Servo.Controllers.BotApiController
   alias Servo.Request
   
+  def route(%Request{ method: "GET", path: "/kaboom" } = req) do
+    # when something goes wrong
+    raise "Kaboom!"
+  end
+
+  def route(%Request{ method: "GET", path: "/sleep/" <> time } = req) do
+    time |> String.to_integer |> :timer.sleep
+
+    %Request{ req | status: 200, res_body: "Reboot!"}
+  end
+
   def route(%Request{ method: "GET", path: "/bot_crew" } = req) do
     %Request{ req | status: 200, res_body: "Cambot, Gypsy, Tom Servo, Crow"}
   end

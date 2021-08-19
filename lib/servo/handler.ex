@@ -12,7 +12,7 @@ defmodule Servo.Handler do
   def handle(req) do
     req
     |> parse
-    |> log
+    # |> log
     |> rewrite_path
     |> route
     |> trace
