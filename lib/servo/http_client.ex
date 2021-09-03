@@ -21,17 +21,4 @@ defmodule Servo.HttpClient do
     
     response
   end
-  
-  @doc """
-  Returns a mock request for testing.
-  """
-  def get_request do
-    """
-    GET /bots HTTP/1.1\r
-    Host: example.com\r
-    User-Agent: ExampleBrowser/1.0\r
-    Accept: */*\r
-    \r
-    """
-  end
 end
