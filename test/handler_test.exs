@@ -2,8 +2,13 @@ defmodule HandlerTest do
   use ExUnit.Case, async: true
   
   import Servo.Handler, only: [handle: 1]
+
+  alias Servo.HttpServer
+  alias Servo.HttpClient
   
   test "GET /bot_crew" do
+    spawn(HttpServer, :start, [4000])
+
     request = """
     GET /bot_crew HTTP/1.1\r
     HOST: example.com\r
@@ -11,8 +16,8 @@ defmodule HandlerTest do
     Accept: */*\r
     \r
     """
-    
-    response = handle(request)
+
+    response = HttpClient.send_request(request)
     
     assert response == """
     HTTP/1.1 200 OK\r
@@ -191,9 +196,10 @@ defmodule HandlerTest do
     expected_response = """
     HTTP/1.1 200 OK\r
     Content-Type: text/html\r
-    Content-Length: 33\r
+    Content-Length: 70\r
     \r
     <h1>Welcome to my homepage</h1>
+    <p><a href="/pages/faq">faq</a></p>
     """
     
     assert remove_whitespace(response) == remove_whitespace(expected_response)
