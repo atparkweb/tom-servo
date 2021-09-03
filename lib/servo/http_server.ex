@@ -13,7 +13,8 @@ defmodule Servo.HttpServer do
   Starts the server on the given `port` of localhost. (Ports 0-1023 are reserved for OS)
   """
   def start(port) when is_integer(port) and port > 1023 do
-    {:ok, listen_socket} = :gen_tcp.listen(port, [:binary, packet: :raw, active: false, reuseaddr: true])
+    options = [:binary, backlog: 10, packet: :raw, active: false, reuseaddr: true]
+    {:ok, listen_socket} = :gen_tcp.listen(port, options)
     
     IO.puts "\n Listening for connection requests on port #{port}...\n"
     
@@ -30,7 +31,10 @@ defmodule Servo.HttpServer do
     IO.puts " Connection accepted!\n"
     
     # Receives the request and sends a response over the client socket.
-    spawn(fn -> serve(client_socket) end)
+    pid = spawn(fn -> serve(client_socket) end)
+
+    # make this the controlling process, so the socket closes properly
+    :ok = :gen_tcp.controlling_process(client_socket, pid)
     
     # Loop back to wait and accept the next connection.
     accept_loop(listen_socket)
@@ -57,19 +61,6 @@ defmodule Servo.HttpServer do
     IO.puts request
     
     request
-  end
-  
-  @doc """
-  Returns a generic HTTP response. For testing only
-  """
-  def generate_response(_request) do
-    """
-    HTTP/1.1 200 OK\r
-    Content-Type: text/plain\r
-    Content-Length: 6\r
-    \r
-    Hello!
-    """
   end
   
   @doc """
