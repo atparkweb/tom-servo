@@ -4,9 +4,6 @@ defmodule Servo.Routes do
   
   ## Routes:
   
-  ### GET /kaboom
-  Simulate an exception generating request
-
   ### GET /sleep/:time
   Simulate a long running request to demonstrate concurrency
 
@@ -40,7 +37,23 @@ defmodule Servo.Routes do
 
   alias Servo.Controllers.BotController
   alias Servo.Controllers.BotApiController
+  alias Servo.ApiClient
   alias Servo.Request
+  
+  # simulate an API request
+  def route(%Request{ method: "GET", path: "/api-data" } = req) do
+    caller = self()
+
+    spawn(fn -> send(caller, ApiClient.get_data(:star_wars)) end)
+    
+    robots = receive do
+      {:data, robot_list} -> robot_list
+    end
+    
+    {:ok, res} = Poison.encode(robots)
+    
+    %{ req | status: 200, res_body: res}
+  end
   
   def route(%Request{ method: "GET", path: "/kaboom" } = req) do
     # when something goes wrong
