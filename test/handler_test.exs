@@ -6,11 +6,15 @@ defmodule HandlerTest do
   alias Servo.HttpServer
   alias Servo.HttpClient
   
-  test "GET /bot_crew" do
+  def start_server do
     spawn(HttpServer, :start, [4000])
-
+  end
+  
+  test "GET /api-data" do
+    start_server()
+    
     request = """
-    GET /bot_crew HTTP/1.1\r
+    GET /api-data HTTP/1.1\r
     HOST: example.com\r
     User-Agent: ExampleBrowser/1.0\r
     Accept: */*\r
@@ -18,16 +22,18 @@ defmodule HandlerTest do
     """
 
     response = HttpClient.send_request(request)
-    
-    assert response == """
+
+    expected_response = """
     HTTP/1.1 200 OK\r
     Content-Type: text/html\r
-    Content-Length: 30\r
+    Content-Length: 21\r
     \r
-    Cambot, Gypsy, Tom Servo, Crow
+    ["R2D2", "C3PO", "BB8"]
     """
-  end
 
+    assert remove_whitespace(response) == remove_whitespace(expected_response)
+  end
+  
   test "GET /bots" do
     request = """
     GET /bots HTTP/1.1\r
