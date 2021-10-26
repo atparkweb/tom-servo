@@ -3,13 +3,13 @@ defmodule Servo.ApiClient do
   A mock api client for making calls to backing service
   """
   
-  def get_data(title) do
+  def get_data(key) do
     content = %{
-      star_wars: ["R2D2", "C3PO", "BB8"],
-      transformers: ["Star Scream", "Megatron", "Optimus", "Bumblebee"],
-      futurama: ["Bender", "Clamps", "Hedonism Bot", "Devil"]
+      one: "ONE",
+      two: "TWO",
+      three: "THREE"
     }
 
-    {:data, content[title]}
+    {:result, content[key]}
   end
 end
