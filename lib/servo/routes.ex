@@ -15,13 +15,13 @@ defmodule Servo.Routes do
   
   # simulate an API request
   def route(%Request{ method: "GET", path: "/api-data" } = req) do
-    Fetch.async(fn -> ApiClient.get_data(:one) end)
-    Fetch.async(fn -> ApiClient.get_data(:two) end)
-    Fetch.async(fn -> ApiClient.get_data(:three) end)
+    pid1 = Fetch.async(fn -> ApiClient.get_data(:one) end)
+    pid2 = Fetch.async(fn -> ApiClient.get_data(:two) end)
+    pid3 = Fetch.async(fn -> ApiClient.get_data(:three) end)
     
-    result1 = Fetch.get_result()
-    result2 = Fetch.get_result()
-    result3 = Fetch.get_result()
+    result1 = Fetch.get_result(pid1)
+    result2 = Fetch.get_result(pid2)
+    result3 = Fetch.get_result(pid3)
     
     results = [result1, result2, result3]
     

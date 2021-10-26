@@ -10,6 +10,6 @@ defmodule Servo.ApiClient do
       three: "THREE"
     }
 
-    {:result, content[key]}
+    content[key]
   end
 end
