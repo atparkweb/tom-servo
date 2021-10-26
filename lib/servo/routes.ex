@@ -7,6 +7,7 @@ defmodule Servo.Routes do
 
   import Servo.FileHandler, only: [ handle_file: 2, markdown_to_html: 1 ]
 
+  alias Servo.ApiClient
   alias Servo.Controllers.BotController
   alias Servo.Controllers.BotApiController
   alias Servo.Fetch
@@ -14,9 +15,9 @@ defmodule Servo.Routes do
   
   # simulate an API request
   def route(%Request{ method: "GET", path: "/api-data" } = req) do
-    Fetch.async(:one)
-    Fetch.async(:two)
-    Fetch.async(:three)
+    Fetch.async(fn -> ApiClient.get_data(:one) end)
+    Fetch.async(fn -> ApiClient.get_data(:two) end)
+    Fetch.async(fn -> ApiClient.get_data(:three) end)
     
     result1 = Fetch.get_result()
     result2 = Fetch.get_result()
