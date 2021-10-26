@@ -9,13 +9,13 @@ defmodule Servo.Fetch do
   def async(f) do
     parent = self()
 
-    spawn(fn -> send(parent, f.()) end)
+    spawn(fn -> send(parent, {self(), :result, f.()}) end)
   end
   
   @doc """
   Gets the result from an async process
   """
-  def get_result do
-    receive do {:result, value} -> value end
+  def get_result(pid) do
+    receive do {^pid, :result, value} -> value end
   end
 end
