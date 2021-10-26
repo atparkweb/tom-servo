@@ -9,22 +9,18 @@ defmodule Servo.Routes do
 
   alias Servo.Controllers.BotController
   alias Servo.Controllers.BotApiController
-  alias Servo.ApiClient
+  alias Servo.Fetch
   alias Servo.Request
   
   # simulate an API request
   def route(%Request{ method: "GET", path: "/api-data" } = req) do
-
-    # need to store self as a local variable before passing to spawn/send
-    caller = self()
-
-    spawn(fn -> :timer.sleep(60000) ; send(caller, ApiClient.get_data(:one)) end)
-    spawn(fn -> :timer.sleep(30000) ; send(caller, ApiClient.get_data(:two)) end)
-    spawn(fn -> :timer.sleep(20000) ; send(caller, ApiClient.get_data(:three)) end)
+    Fetch.async(:one)
+    Fetch.async(:two)
+    Fetch.async(:three)
     
-    result1 = receive do {:result, data} -> data end
-    result2 = receive do {:result, data} -> data end
-    result3 = receive do {:result, data} -> data end
+    result1 = Fetch.get_result()
+    result2 = Fetch.get_result()
+    result3 = Fetch.get_result()
     
     results = [result1, result2, result3]
     
@@ -33,7 +29,7 @@ defmodule Servo.Routes do
     %{ req | status: 200, res_body: res}
   end
   
-  def route(%Request{ method: "GET", path: "/kaboom" } = req) do
+  def route(%Request{ method: "GET", path: "/kaboom" } = _req) do
     # when something goes wrong
     raise "Kaboom!"
   end
