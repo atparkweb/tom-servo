@@ -15,15 +15,10 @@ defmodule Servo.Routes do
   
   # simulate an API request
   def route(%Request{ method: "GET", path: "/api-data" } = req) do
-    pid1 = Fetch.async(fn -> ApiClient.get_data(:one) end)
-    pid2 = Fetch.async(fn -> ApiClient.get_data(:two) end)
-    pid3 = Fetch.async(fn -> ApiClient.get_data(:three) end)
-    
-    result1 = Fetch.get_result(pid1)
-    result2 = Fetch.get_result(pid2)
-    result3 = Fetch.get_result(pid3)
-    
-    results = [result1, result2, result3]
+    results =
+      [:one, :two, :three]
+      |> Enum.map(&Fetch.async(fn -> ApiClient.get_data(&1) end)
+      |> Enum.map(&Fetch.get_result/1)
     
     {:ok, res} = Poison.encode(results)
     
