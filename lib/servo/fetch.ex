@@ -3,21 +3,19 @@ defmodule Servo.Fetch do
   An abstraction around how API client is called and how it's result is resolved
   """
 
-  alias Servo.ApiClient
-
   @doc """
-  Spawns an simulated async call to an external API
+  Spawns an async process
   """
-  def async(name) do
+  def async(f) do
     parent = self()
 
-    spawn(fn -> :timer.sleep(2000) ; send(parent, ApiClient.get_data(name)) end)
+    spawn(fn -> send(parent, f.()) end)
   end
   
   @doc """
-  Gets the result from an async call
+  Gets the result from an async process
   """
   def get_result do
-    receive do {:result, data} -> data end
+    receive do {:result, value} -> value end
   end
 end
