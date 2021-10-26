@@ -1,36 +1,8 @@
 defmodule Servo.Routes do
   @moduledoc """
-  REST Routes. Delegate action to Controller
-  
-  ## Routes:
-  
-  ### GET /sleep/:time
-  Simulate a long running request to demonstrate concurrency
-
-  ### GET /bots
-  Get a list of all bots
-
-  ### GET /bots/:id
-  Get a single bot by :id
-  
-  ### GET /pages/:name
-  Get a page by name
-
-  ### POST /bots
-  Create a new bot by sending parameters
-
-  Parameter example: name=R2D2&type=Astro
-
-  DELETE requests are denied
-  
-  ### GET /api/bots
-  Get list of bots as JSON data
-  
-  ### POST /api/bots
-  Create a new bot by sending JSON
+  REST Routes. Delegate action to controllers
   """
-
-  # Attributes
+  
   @pages_path Path.expand("../../pages", __DIR__)
 
   import Servo.FileHandler, only: [ handle_file: 2, markdown_to_html: 1 ]
@@ -42,15 +14,21 @@ defmodule Servo.Routes do
   
   # simulate an API request
   def route(%Request{ method: "GET", path: "/api-data" } = req) do
+
+    # need to store self as a local variable before passing to spawn/send
     caller = self()
 
-    spawn(fn -> send(caller, ApiClient.get_data(:star_wars)) end)
+    spawn(fn -> :timer.sleep(60000) ; send(caller, ApiClient.get_data(:one)) end)
+    spawn(fn -> :timer.sleep(30000) ; send(caller, ApiClient.get_data(:two)) end)
+    spawn(fn -> :timer.sleep(20000) ; send(caller, ApiClient.get_data(:three)) end)
     
-    robots = receive do
-      {:data, robot_list} -> robot_list
-    end
+    result1 = receive do {:result, data} -> data end
+    result2 = receive do {:result, data} -> data end
+    result3 = receive do {:result, data} -> data end
     
-    {:ok, res} = Poison.encode(robots)
+    results = [result1, result2, result3]
+    
+    {:ok, res} = Poison.encode(results)
     
     %{ req | status: 200, res_body: res}
   end
