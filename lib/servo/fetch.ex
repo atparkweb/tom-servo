@@ -1,6 +1,8 @@
 defmodule Servo.Fetch do
   @moduledoc """
-  An abstraction around how API client is called and how it's result is resolved
+  An abstraction around how API client is called and how it's result is resolved.
+
+  Basically this just a duplicate implementation of Elixir's built in `Task` module
   """
 
   @doc """
