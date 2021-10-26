@@ -10,15 +10,14 @@ defmodule Servo.Routes do
   alias Servo.ApiClient
   alias Servo.Controllers.BotController
   alias Servo.Controllers.BotApiController
-  alias Servo.Fetch
   alias Servo.Request
   
   # simulate an API request
   def route(%Request{ method: "GET", path: "/api-data" } = req) do
     results =
       [:one, :two, :three]
-      |> Enum.map(&Fetch.async(fn -> ApiClient.get_data(&1) end)
-      |> Enum.map(&Fetch.get_result/1)
+      |> Enum.map(&Task.async(fn -> ApiClient.get_data(&1) end))
+      |> Enum.map(&Task.await/1)
     
     {:ok, res} = Poison.encode(results)
     
