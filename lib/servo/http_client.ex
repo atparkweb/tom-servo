@@ -1,4 +1,6 @@
 defmodule Servo.HttpClient do
+  @moduledoc "This is a mock client for development and testing"
+
   @doc """
   Starts a client on the given `port` of localhost. (Ports 0-1023 are reserved for host OS)
   """
