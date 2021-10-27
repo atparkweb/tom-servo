@@ -1,7 +1,6 @@
 defmodule Servo.Request do
-  @moduledoc """
-    Struct representing HTTP request/response object
-  """
+  @moduledoc "Struct representing HTTP request object"
+
   defstruct headers: %{},
             method: "",
             params: %{},

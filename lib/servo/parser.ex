@@ -1,9 +1,5 @@
 defmodule Servo.Parser do
-  @moduledoc """
-  Example HTTP Request:
-
-
-  """
+  @moduledoc "Translates HTTP requests to and from string"
 
   alias Servo.Request
 
