@@ -1,4 +1,5 @@
 defmodule Servo.HttpServer do
+  @moduledoc "An HTTP server that uses Erlang's GenTCP library"
   
   @doc """
   Starts the server on the given `port` of localhost. (Ports 0-1023 are reserved for OS)

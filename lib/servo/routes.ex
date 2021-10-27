@@ -1,8 +1,4 @@
 defmodule Servo.Routes do
-  @moduledoc """
-  REST Routes. Delegate action to controllers
-  """
-  
   @pages_path Path.expand("../../pages", __DIR__)
 
   import Servo.FileHandler, only: [ handle_file: 2, markdown_to_html: 1 ]
