@@ -10,6 +10,9 @@ defmodule Servo.ApiClient do
       three: "THREE"
     }
 
+    # simulate a 6 second response time
+    :timer.sleep(:timer.seconds(6))
+
     content[key]
   end
 end

@@ -13,7 +13,7 @@ defmodule Servo.Routes do
     results =
       [:one, :two, :three]
       |> Enum.map(&Task.async(fn -> ApiClient.get_data(&1) end))
-      |> Enum.map(&Task.await/1)
+      |> Enum.map(&Task.await(&1, :timer.seconds(7))) # timout after 7 seconds
     
     {:ok, res} = Poison.encode(results)
     
