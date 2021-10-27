@@ -8,11 +8,11 @@ defmodule Servo.Handler do
   
   alias Servo.Request
 
-  @doc "Transfroms an HTTP request string into a response."
+  @doc "Transforms an HTTP request string into a response."
   def handle(req) do
     req
     |> parse
-    # |> log
+    |> log
     |> rewrite_path
     |> route
     |> trace
