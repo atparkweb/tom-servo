@@ -28,7 +28,7 @@ defmodule HandlerTest do
     Content-Type: text/html\r
     Content-Length: 21\r
     \r
-    ["R2D2", "C3PO", "BB8"]
+    ["ONE", "TWO", "THREE"]
     """
 
     assert remove_whitespace(response) == remove_whitespace(expected_response)
