@@ -18,6 +18,10 @@ defmodule Servo.Fetch do
   Gets the result from an async process
   """
   def get_result(pid) do
-    receive do {^pid, :result, value} -> value end
+    receive do
+      {^pid, :result, value} -> value
+    after :timer.seconds(2) ->
+      raise "Task #{inspect pid} timed out."
+    end
   end
 end
