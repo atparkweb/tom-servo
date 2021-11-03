@@ -6,6 +6,7 @@ defmodule Servo.Routes do
   alias Servo.ApiClient
   alias Servo.Controllers.BotController
   alias Servo.Controllers.BotApiController
+  alias Servo.Controllers.MessageController
   alias Servo.Request
   
   # simulate an API request
@@ -71,6 +72,14 @@ defmodule Servo.Routes do
 
   def route(%Request{ method: "POST", path: "/api/bots" } = req) do
     BotApiController.create(req, req.params)
+  end
+  
+  def route(%Request{ method: "POST", path: "/fuel" } = req) do
+    MessageController.create(req, req.params)
+  end
+  
+  def route(%Request{ method: "GET", path: "/fuel" } = req) do
+    MessageController.index(req)
   end
 
   def route(%Request{ method: method, path: path } = req) do
