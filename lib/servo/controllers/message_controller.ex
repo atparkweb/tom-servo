@@ -7,10 +7,7 @@ defmodule Servo.Controllers.MessageController do
   end
   
   def create(req, %{"name" => name, "message" => message}) do
-    MessageServer.create_message(name, message)
-    receive do
-      {:create_message, name, message} ->
-        %{ req | status: 201, res_body: "#{name}: #{message}" }
-    end
+    status = MessageServer.create_message(name, message)
+    %{ req | status: 201, res_body: "Message sent: #{status}" }
   end
 end
