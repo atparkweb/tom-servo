@@ -3,7 +3,6 @@ defmodule Servo.Routes do
 
   import Servo.FileHandler, only: [ handle_file: 2, markdown_to_html: 1 ]
 
-  alias Servo.ApiClient
   alias Servo.Controllers.BotController
   alias Servo.Controllers.BotApiController
   alias Servo.Controllers.MessageController
@@ -13,7 +12,7 @@ defmodule Servo.Routes do
   def route(%Request{ method: "GET", path: "/api-data" } = req) do
     results =
       [:one, :two, :three]
-      |> Enum.map(&Task.async(fn -> ApiClient.get_data(&1) end))
+      |> Enum.map(&Task.async(fn -> Api.Client.get_data(&1) end))
       |> Enum.map(&Task.await(&1, :timer.seconds(7))) # timout after 7 seconds
     
     {:ok, res} = Poison.encode(results)

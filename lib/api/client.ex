@@ -1,4 +1,4 @@
-defmodule Servo.ApiClient do
+defmodule Api.Client do
   @moduledoc """
   A mock api client for making calls to backing service
   """

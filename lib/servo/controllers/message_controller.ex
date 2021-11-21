@@ -1,10 +1,16 @@
 defmodule Servo.Controllers.MessageController do
+  alias Servo.MessageServer
+
   def index(req) do
-    # get most recent mesages from the cache
-    messages = recent_messages()
+    messages = MessageServer.recent_messages()
+    %{ req | state: 200, resp_body: (inspect messages) }
   end
   
-  def create(req, params) do
-    # TODO: implement create action
+  def create(req, %{"name" => name, "message" => message}) do
+    MessageServer.create_message(name, message)
+    receive do
+      {:create_message, name, message} ->
+        %{ req | status: 201, resp_body: "#{name}: #{message}" }
+    end
   end
 end
