@@ -73,11 +73,11 @@ defmodule Servo.Routes do
     BotApiController.create(req, req.params)
   end
   
-  def route(%Request{ method: "POST", path: "/fuel" } = req) do
+  def route(%Request{ method: "POST", path: "/message" } = req) do
     MessageController.create(req, req.params)
   end
   
-  def route(%Request{ method: "GET", path: "/fuel" } = req) do
+  def route(%Request{ method: "GET", path: "/message" } = req) do
     MessageController.index(req)
   end
 
