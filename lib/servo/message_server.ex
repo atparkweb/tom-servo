@@ -1,5 +1,5 @@
 defmodule Servo.MessageServer do
-  @process :message_server
+  @process __MODULE__
 
   def start do
     IO.puts "Starting message server..."
@@ -48,14 +48,3 @@ defmodule Servo.MessageServer do
   end
 end
 
-# alias Servo.MessageServer
-
-# MessageServer.start()
-# IO.inspect MessageServer.create_message("andy", "hello!")
-# IO.inspect MessageServer.create_message("jessica", "hi Andy!")
-# IO.inspect MessageServer.create_message("andy", "remember me?")
-# IO.inspect MessageServer.create_message("jessica", "of course! how are you?")
-# IO.inspect MessageServer.create_message("andy", "great! you?")
-
-# messages = MessageServer.recent_messages()
-# IO.inspect messages
