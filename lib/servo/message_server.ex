@@ -4,7 +4,7 @@ defmodule Servo.MessageServer do
   def start do
     IO.puts "Starting message server..."
     pid = spawn(__MODULE__, :listen_loop, [[]])
-    Process.register(pid, :message_server)
+    Process.register(pid, @process)
     pid
   end
 
