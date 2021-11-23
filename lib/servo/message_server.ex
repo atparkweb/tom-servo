@@ -3,7 +3,7 @@ defmodule Servo.MessageServer do
 
   def start do
     IO.puts "Starting message server..."
-    pid = spawn(__MODULE__, :listen_loop, [[]])
+    pid = spawn(__MODULE__, :listen, [[]])
     Process.register(pid, @process)
     pid
   end
@@ -33,17 +33,17 @@ defmodule Servo.MessageServer do
         new_state = [ {name, message} | Enum.take(state, 2) ]
 
 	send pid, {:response, id}
-        listen_loop(new_state)
+        listen(new_state)
       {pid, :recent_messages} ->
         send pid, {:response, state}
-        listen_loop(state)
+        listen(state)
       {pid, :total_messages} ->
         total = Enum.map(state, &elem(&1, 1)) |> Enum.sum
 	send pid, {:response, total}
-	listen_loop(state)
+	listen(state)
       unexpected ->
         IO.puts "Unexpected message: #{inspect unexpected}"
-	listen_loop(state)
+	listen(state)
     end
   end
 end
