@@ -9,6 +9,7 @@ defmodule Servo.Fetch do
   Spawns an async process
   """
   def async(f) do
+    # Need to store this process' pid here since the send in the spawned process is inside a function
     parent = self()
 
     spawn(fn -> send(parent, {self(), :result, f.()}) end)
