@@ -25,6 +25,11 @@ defmodule Servo.Routes do
     raise "Kaboom!"
   end
 
+  def route(%Request{ method: "GET", path: "/404s" } = req) do
+    counts = Servo.FourOhFourCounter.get_counts()
+    %Request{ req | status: 200, res_body: inspect counts }
+  end
+
   def route(%Request{ method: "GET", path: "/sleep/" <> time } = req) do
     time |> String.to_integer |> :timer.sleep
 
