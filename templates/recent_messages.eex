@@ -1,0 +1,9 @@
+<h1>Recent Messages</h1>
+
+<ul>
+  <%= for msg <- messages do %>
+    <li><%= elem(msg, 0) %>:  <%= elem(msg, 1) %></li>
+  <% end %>
+</ul>
+
+<a href="/message/new">Create a message</a>
