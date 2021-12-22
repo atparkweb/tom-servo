@@ -29,21 +29,20 @@ defmodule Servo.MessageServer do
       {pid, :create_message, name, message} ->
         {:ok, id} = save_message(name, message)
         
-	# only track last 3 messages
+        # only track last 3 messages
         new_state = [ {name, message} | Enum.take(state, 2) ]
-
-	send pid, {:response, id}
+        send pid, {:response, id}
         listen(new_state)
       {pid, :recent_messages} ->
         send pid, {:response, state}
         listen(state)
       {pid, :total_messages} ->
         total = Enum.map(state, &elem(&1, 1)) |> Enum.sum
-	send pid, {:response, total}
-	listen(state)
+        send pid, {:response, total}
+        listen(state)
       unexpected ->
         IO.puts "Unexpected message: #{inspect unexpected}"
-	listen(state)
+       	listen(state)
     end
   end
 end
