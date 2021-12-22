@@ -1,9 +1,14 @@
 defmodule Servo.Controllers.MessageController do
+  import Servo.View
   alias Servo.MessageServer
 
   def index(req) do
     messages = MessageServer.recent_messages()
-    %{ req | status: 200, res_body: (inspect messages) }
+    render(req, "recent_messages.eex", messages: messages)
+  end
+  
+  def new(req) do
+    render(req, "new_message.eex")
   end
   
   def create(req, %{"name" => name, "message" => message}) do

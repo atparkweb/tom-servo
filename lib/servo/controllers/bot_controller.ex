@@ -1,6 +1,7 @@
 defmodule Servo.Controllers.BotController do
+  import Servo.View
+
   alias Servo.Resources.BotStore
-  alias Servo.Views.BotView
   alias Servo.Request
   
   def index(req) do
@@ -8,15 +9,13 @@ defmodule Servo.Controllers.BotController do
       BotStore.list_bots
       |> Enum.filter(fn(b) -> b.is_active end)
 
-    # render(req, "index.eex", bots: bot_list)
-    %Request{ req | status: 200, res_body: BotView.index(bot_list) }
+    render(req, "index.eex", bots: bot_list)
   end
 
   def show(req, %{ "id" => id }) do
     bot = BotStore.get_bot(id)
     
-    # render(req, "show.eex", bot: bot)
-    %Request{ req | status: 200, res_body: BotView.show(bot) }
+    render(req, "show.eex", bot: bot)
   end
 
   def create(req, %{ "name" => name, "color" => color }) do

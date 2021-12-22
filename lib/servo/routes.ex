@@ -85,6 +85,10 @@ defmodule Servo.Routes do
   def route(%Request{ method: "GET", path: "/message" } = req) do
     MessageController.index(req)
   end
+  
+  def route(%Request{ method: "GET", path: "/message/new" } = req) do
+    MessageController.new(req)
+  end
 
   def route(%Request{ method: method, path: path } = req) do
     %Request{ req | status: 404, res_body: "Cannot #{method} route #{path}" }
