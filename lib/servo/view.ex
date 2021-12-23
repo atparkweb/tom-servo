@@ -1,10 +1,10 @@
 defmodule Servo.View do
   require EEx
-  
+
   alias Servo.Request
 
   @templates_path Path.expand("../../templates", __DIR__)
-  
+
   def render(req, template, bindings \\ []) do
     content =
       @templates_path
