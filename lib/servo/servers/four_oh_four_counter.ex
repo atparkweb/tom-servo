@@ -47,21 +47,29 @@ defmodule Servo.FourOhFourCounter do
   def handle_call(:all_counts, state) do
     {state, state}
   end
-
-  def handle_cast({:increment, path}, state) do
+  def handle_call({:increment, path}, state) do
     new_state = Map.update(state, path, 1, fn c -> c + 1 end)
-    new_state
+    count = Map.get(state, path)
+    {count, new_state}
+  end
+
+  def handle_cast(:reset, _state) do
+    %{}
   end
 
   def inc(path) do
-    GenServerTwo.cast @name, {:increment, path}
+    GenServerTwo.call @name, {:increment, path}
   end
 
   def get_count(path) do
     GenServerTwo.call @name, {:count, path}
   end
 
-  def get_counts() do
+  def get_counts do
     GenServerTwo.call @name, :all_counts
+  end
+
+  def reset do
+    GenServerTwo.cast @name, :reset
   end
 end
