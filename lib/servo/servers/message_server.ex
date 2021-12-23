@@ -7,6 +7,9 @@ defmodule Servo.MessageServer do
     defstruct cache_size: 3, messages: []
   end
 
+
+  # Client interface
+
   def start do
     IO.puts "Starting the message server..."
     GenServer.start(__MODULE__, %State{}, name: @name)
@@ -32,9 +35,16 @@ defmodule Servo.MessageServer do
     GenServer.cast @name, {:set_cache_size, size}
   end
 
-  defp save_message(name, _message) do
-    # TODO: Send to backing service
-    { :ok, "message from #{name} " }
+
+  # Server callbacks (GenServer behaviour implementations)
+
+  # init args come from initial state from `start` call
+  def init(state) do
+    # setting initial state from backing service data
+    messages = fetch_recent_from_service()
+
+    new_state = %{ state | messages: messages }
+    {:ok, new_state}
   end
 
   def handle_call(:total_messages, _from, state) do
@@ -42,7 +52,7 @@ defmodule Servo.MessageServer do
     {:reply, total, state}
   end
   def handle_call(:recent_messages, _from, state) do
-    {:reply, state, state}
+    {:reply, state.messages, state}
   end
   def handle_call({:create_message, name, message}, _from, state) do
     {:ok, id} = save_message(name, message)
@@ -61,14 +71,41 @@ defmodule Servo.MessageServer do
     new_state = %{ state | cache_size: size }
     {:noreply, new_state}
   end
+
+  def handle_info(message, state) do
+    IO.puts "Unexpected message! #{inspect message}"
+    {:noreply, state}
+  end
+
+  # Mock backing service functions
+
+  defp save_message(name, _message) do
+    # TODO: Send to backing service
+    { :ok, "message from #{name} " }
+  end
+
+  defp fetch_recent_from_service do
+    # Code to fetch data from backing service goes here
+
+    # Example return value
+    [ { "axel", "radical" }, { "blaze", "awesome" }, { "adam", "cool" }]
+  end
+
 end
 
 alias Servo.MessageServer
 
-MessageServer.start()
-MessageServer.create_message("Player 1", "Hello")
-MessageServer.create_message("Player 2", "Hi")
-MessageServer.create_message("Player 1", "What's up?")
-MessageServer.create_message("Player 3", "Hola")
+{:ok, pid} = MessageServer.start()
+
+send pid, {:alert, "Time's up"}
+
+MessageServer.set_cache_size(4)
+
+IO.inspect MessageServer.create_message("Player 2", "Hello")
+# IO.inspect MessageServer.create_message("Player 2", "Hi")
+# IO.inspect MessageServer.create_message("Player 1", "What's up?")
+# IO.inspect MessageServer.create_message("Player 3", "Hola")
+
 IO.inspect MessageServer.recent_messages()
+
 IO.inspect MessageServer.total_messages()
