@@ -1,40 +1,67 @@
-defmodule Servo.FourOhFourCounter do
-  @process __MODULE__
-
-  def start() do
-    IO.puts "Starting 404 counter server..."
-    pid = spawn(__MODULE__, :listen, [%{}])
-    Process.register(pid, @process)
+defmodule Servo.GenServerTwo do
+  def start(callback_module, initial_state, name) do
+    pid = spawn(__MODULE__, :listen_loop, [initial_state, callback_module])
+    Process.register(pid, name)
     pid
   end
 
+  def call(pid, message) do
+    send pid, {:call, self(), message}
+    receive do {:response, response} -> response end
+  end
+
+  def cast(pid, message) do
+    send pid, {:cast, message}
+  end
+
+  def listen_loop(state, callback_module) do
+    receive do
+      {:call, sender, message} ->
+        {response, new_state} = callback_module.handle_call(message, state)
+        send sender, {:response, response}
+        listen_loop(new_state, callback_module)
+      {:cast, message} ->
+        new_state = callback_module.handle_cast(message, state)
+        listen_loop(new_state, callback_module)
+      unexpected ->
+        IO.puts "Unexpected message: #{inspect unexpected}"
+        listen_loop(state, callback_module)
+    end
+  end
+end
+
+defmodule Servo.FourOhFourCounter do
+  @name :four_oh_four_server
+
+  alias Servo.GenServerTwo
+
+  def start() do
+    IO.puts "Starting 404 counter server..."
+    GenServerTwo.start(__MODULE__, %{}, @name)
+  end
+
+  def handle_call({:count, path}, state) do
+    count = Map.get(state, path)
+    {count, state}
+  end
+  def handle_call(:all_counts, state) do
+    {state, state}
+  end
+
+  def handle_cast({:increment, path}, state) do
+    new_state = Map.update(state, path, 1, fn c -> c + 1 end)
+    new_state
+  end
+
   def inc(path) do
-    send @process, {self(), :increment, path}
-    receive do {:response, count} -> count end
+    GenServerTwo.cast @name, {:increment, path}
   end
 
   def get_count(path) do
-    send @process, {self(), :count, path}
-    receive do {:response, count} -> count end
+    GenServerTwo.call @name, {:count, path}
   end
 
   def get_counts() do
-    send @process, {self(), :all_counts}
-    receive do {:response, counts} -> counts end
-  end
-
-  def listen(state) do
-    receive do
-      {pid, :increment, path} ->
-        new_state = Map.update(state, path, 1, fn c -> c + 1 end)
-        send pid, {:response, Map.get(new_state, path) }
-        listen(new_state)
-      {pid, :count, path} ->
-        send pid, {:response, Map.get(state, path)}
-        listen(state)
-      {pid, :all_counts} ->
-        send pid, {:response, state}
-        listen(state)
-    end
+    GenServerTwo.call @name, :all_counts
   end
 end

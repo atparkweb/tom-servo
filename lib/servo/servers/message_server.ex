@@ -81,6 +81,7 @@ defmodule Servo.MessageServer do
   end
 
   def handle_cast(:clear, _state) do
+    []
   end
 end
 
