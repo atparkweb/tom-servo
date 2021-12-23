@@ -9,15 +9,22 @@ defmodule Servo.MessageServer do
   end
 
   def recent_messages do
-    send @process, {self(), :recent_messages}
-    receive do {:response, messages} -> messages end
+    call @process, :recent_messages
   end
-  
+
+  def total_messages do
+    call @process, :total_messages
+  end
+
   def create_message(name, message) do
-    send @process, {self(), :create_message, name, message} 
-    receive do {:response, status} -> status end
+    call @process, {:create_message, name, message} 
   end
-  
+
+  def call(pid, message) do
+    send pid, {self(), message}
+    receive do {:response, response} -> response end
+  end
+
   defp save_message(name, _message) do
     # TODO: Send to backing service
     { :ok, "message from #{name} " }
@@ -26,9 +33,9 @@ defmodule Servo.MessageServer do
   @doc "Server process loop. State should initially be an empty list."
   def listen(state) do
     receive do
-      {pid, :create_message, name, message} ->
+      {pid, {:create_message, name, message}} ->
         {:ok, id} = save_message(name, message)
-        
+
         # only track last 3 messages
         new_state = [ {name, message} | Enum.take(state, 2) ]
         send pid, {:response, id}
@@ -42,7 +49,7 @@ defmodule Servo.MessageServer do
         listen(state)
       unexpected ->
         IO.puts "Unexpected message: #{inspect unexpected}"
-       	listen(state)
+        listen(state)
     end
   end
 end
