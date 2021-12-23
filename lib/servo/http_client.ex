@@ -13,7 +13,7 @@ defmodule Servo.HttpClient do
     :ok = :gen_tcp.send(socket, request)
     {:ok, response} = :gen_tcp.recv(socket, 0)
     :ok = :gen_tcp.close(socket)
-    
+
     response
   end
 end

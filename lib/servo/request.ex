@@ -4,15 +4,15 @@ defmodule Servo.Request do
   defstruct headers: %{},
             method: "",
             params: %{},
-	    path: "",
+            path: "",
             res_headers: %{"Content-Type" => "text/html"},
-	    res_body: "",
-	    status: nil
-  
+            res_body: "",
+            status: nil
+
   def full_status(req) do
     "#{req.status} #{status_desc(req.status)}"
   end
-  
+
   defp status_desc(code) do
     %{
       200 => "OK",

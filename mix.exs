@@ -32,11 +32,11 @@ defmodule Servo.MixProject do
       { :earmark, "~> 1.4" }
     ]
   end
-  
+
   defp description do
     "An example of a simple HTTP server built from scratch with Elixir."
   end
-  
+
   defp package do
     [
       name: "atparkweb_servo",

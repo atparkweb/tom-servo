@@ -1,18 +1,18 @@
 defmodule HandlerTest do
   use ExUnit.Case, async: true
-  
+
   import Servo.Handler, only: [handle: 1]
 
   alias Servo.HttpServer
   alias Servo.HttpClient
-  
+
   def start_server do
     spawn(HttpServer, :start, [4000])
   end
-  
+
   test "GET /api-data" do
     start_server()
-    
+
     request = """
     GET /api-data HTTP/1.1\r
     HOST: example.com\r
@@ -33,7 +33,7 @@ defmodule HandlerTest do
 
     assert remove_whitespace(response) == remove_whitespace(expected_response)
   end
-  
+
   test "GET /bots" do
     request = """
     GET /bots HTTP/1.1\r
@@ -63,7 +63,7 @@ defmodule HandlerTest do
 
     assert remove_whitespace(response) == remove_whitespace(expected_response)
   end
-  
+
   test "GET /bots/:id" do
     request = """
     GET /bots/1 HTTP/1.1\r
@@ -88,7 +88,7 @@ defmodule HandlerTest do
       Color: orange
     </p>
     """
-    
+
     assert remove_whitespace(response) == remove_whitespace(expected_response)
   end
 
@@ -102,9 +102,9 @@ defmodule HandlerTest do
     \r
     name=C3PO&color=gold
     """
-    
+
     response = handle(request)
-    
+
     assert response == """
     HTTP/1.1 201 Created\r
     Content-Type: text/html\r
@@ -122,9 +122,9 @@ defmodule HandlerTest do
     Accept: */*\r
     \r
     """
-    
+
     response = handle(request)
-    
+
     assert response == """
     HTTP/1.1 403 Forbidden\r
     Content-Type: text/html\r
@@ -161,7 +161,7 @@ defmodule HandlerTest do
 
     assert remove_whitespace(response) == remove_whitespace(expected_response)
   end
-  
+
   test "POST /api/bots" do
     request = """
     POST /api/bots HTTP/1.1\r
@@ -186,7 +186,7 @@ defmodule HandlerTest do
 
     assert response == expected_response
   end
-  
+
 
   test "GET /pages/home" do
     request = """
@@ -207,7 +207,7 @@ defmodule HandlerTest do
     <h1>Welcome to my homepage</h1>
     <p><a href="/pages/faq">faq</a></p>
     """
-    
+
     assert remove_whitespace(response) == remove_whitespace(expected_response)
   end
 

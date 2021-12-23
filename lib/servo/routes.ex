@@ -7,19 +7,19 @@ defmodule Servo.Routes do
   alias Servo.Controllers.BotApiController
   alias Servo.Controllers.MessageController
   alias Servo.Request
-  
+
   # simulate an API request
   def route(%Request{ method: "GET", path: "/api-data" } = req) do
     results =
       [:one, :two, :three]
       |> Enum.map(&Task.async(fn -> Api.Client.get_data(&1) end))
       |> Enum.map(&Task.await(&1, :timer.seconds(7))) # timout after 7 seconds
-    
+
     {:ok, res} = Poison.encode(results)
-    
+
     %{ req | status: 200, res_body: res}
   end
-  
+
   def route(%Request{ method: "GET", path: "/kaboom" } = _req) do
     # when something goes wrong
     raise "Kaboom!"
@@ -48,7 +48,7 @@ defmodule Servo.Routes do
     params = Map.put(req.params, "id", id)
     BotController.show(req, params)
   end
-  
+
   def route(%Request{ method: "GET", path: "/pages/" <> page } = req) do
     @pages_path
     |> Path.join("#{page}.md")
@@ -56,11 +56,11 @@ defmodule Servo.Routes do
     |> handle_file(req)
     |> markdown_to_html
   end
-  
+
   def route(%Request{ method: "GET", path: "/" } = req) do
     route(%Request{ req | path: "/pages/home" })
   end
-  
+
   def route(%Request{ method: "POST", path: "/bots" } = req) do
     BotController.create(req, req.params)
   end
@@ -77,15 +77,15 @@ defmodule Servo.Routes do
   def route(%Request{ method: "POST", path: "/api/bots" } = req) do
     BotApiController.create(req, req.params)
   end
-  
+
   def route(%Request{ method: "POST", path: "/message" } = req) do
     MessageController.create(req, req.params)
   end
-  
+
   def route(%Request{ method: "GET", path: "/message" } = req) do
     MessageController.index(req)
   end
-  
+
   def route(%Request{ method: "GET", path: "/message/new" } = req) do
     MessageController.new(req)
   end

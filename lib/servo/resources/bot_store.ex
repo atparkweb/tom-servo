@@ -5,7 +5,7 @@ defmodule Servo.Resources.BotStore do
   """
 
   alias Servo.Resources.Bot
-  
+
   @doc """
   Get a list of all the Bots
   """
@@ -16,24 +16,24 @@ defmodule Servo.Resources.BotStore do
     |> Poison.decode!(as: %{"bots" => [%Bot{}]})
     |> Map.get("bots")
   end
-  
+
   defp read_json(source) do
     case File.read(source) do
       {:ok, contents} ->
         contents
       {:error, reason} ->
         IO.inspect "Error reading #{source}: #{reason}"
-	"[]"
+        "[]"
     end
   end
-  
+
   @doc """
   Get a single bot by ID
   """
   def get_bot(id) when is_integer(id) do
     Enum.find(list_bots(), fn(b) -> b.id == id end)
   end
-  
+
   def get_bot(id) when is_binary(id) do
     id
     |> String.to_integer

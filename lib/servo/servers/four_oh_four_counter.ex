@@ -7,22 +7,22 @@ defmodule Servo.FourOhFourCounter do
     Process.register(pid, @process)
     pid
   end
-  
+
   def inc(path) do
     send @process, {self(), :increment, path}
     receive do {:response, count} -> count end
   end
-  
+
   def get_count(path) do
     send @process, {self(), :count, path}
     receive do {:response, count} -> count end
   end
-  
+
   def get_counts() do
     send @process, {self(), :all_counts}
     receive do {:response, counts} -> counts end
   end
-  
+
   def listen(state) do
     receive do
       {pid, :increment, path} ->

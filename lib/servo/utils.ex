@@ -1,6 +1,6 @@
 defmodule Servo.Utils do
   @moduledoc "Utilities for transforming requests"
-  
+
   alias Servo.Request
 
   require Logger
@@ -25,7 +25,6 @@ defmodule Servo.Utils do
 
   def trace(%Request{} = req), do: req
 
-  
   @doc "Converts id query string parameter to a path parameter."
   def rewrite_path(%Request{ path: path } = req) do
     regex = ~r{\/(?<name>\w+)\?id=(?<id>\d+)}
@@ -35,14 +34,12 @@ defmodule Servo.Utils do
 
   def rewrite_path(%Request{} = req), do: req
 
-
   defp rewrite_path_captures(%Request{} = req, %{ "name" => name, "id" => id }) do
     %{ req | path: "/#{name}/#{id}" }
   end
 
   defp rewrite_path_captures(%Request{} = req, nil), do: req
 
-  
   defp status_icon(200), do: "✅"
   defp status_icon(201), do: "✅"
   defp status_icon(_), do: "⛔"
@@ -51,12 +48,12 @@ defmodule Servo.Utils do
   def emojify(%Request{ status: status } = req) do
     %Request{ req | res_body: "#{status_icon(status)}\r\n" <> req.res_body }
   end
-  
+
   def put_res_content_type(req, type) do
     headers = Map.put(req.res_headers, "Content-Type", type)
     %{ req | res_headers: headers }
   end
-  
+
   def put_content_length(req) do
     headers = Map.put(req.res_headers, "Content-Length", String.length(req.res_body))
     %{ req | res_headers: headers }

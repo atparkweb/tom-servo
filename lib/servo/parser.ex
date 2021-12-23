@@ -5,19 +5,19 @@ defmodule Servo.Parser do
 
   @doc """
   Convert HTTP Request string to a Request struct
-  
+
   Returns: `%Request{}`
-  
+
   """
   def parse(request) do
     # Separate request body from headers
     [head, body] = String.split(request, "\r\n\r\n")
-    
+
     # Separate request headers from request method line
     [request_line | header_lines] = String.split(head, "\r\n")
 
     [method, path, _] = String.split(request_line, " ")
-    
+
     headers = parse_headers(header_lines)
 
     params = parse_params(headers["Content-Type"], body)
@@ -29,10 +29,10 @@ defmodule Servo.Parser do
       headers: headers
     }
   end
-  
+
   @doc """
   Converts HTTP header lines to a Map
-  
+
   ## Examples
       iex> header_lines = ["Host: example.com", "User-Agent: ExampleBrowser/1.0"]
       iex> Servo.Parser.parse_headers(header_lines)
@@ -44,11 +44,11 @@ defmodule Servo.Parser do
       Map.put(headers, key, String.trim(value))
     end)
   end
-  
+
   @doc """
   Parses a param string of the form `key1=value1&key2=value2`
   into a map with corresponding keys and values.
-  
+
   ## Examples
       iex> params_string = "name=C3PO&color=gold"
       iex> Servo.Parser.parse_params("application/x-www-form-urlencoded", params_string)

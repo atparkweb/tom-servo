@@ -3,7 +3,7 @@ defmodule Servo.Controllers.BotController do
 
   alias Servo.Resources.BotStore
   alias Servo.Request
-  
+
   def index(req) do
     bot_list =
       BotStore.list_bots
@@ -14,7 +14,7 @@ defmodule Servo.Controllers.BotController do
 
   def show(req, %{ "id" => id }) do
     bot = BotStore.get_bot(id)
-    
+
     render(req, "show.eex", bot: bot)
   end
 

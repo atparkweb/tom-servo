@@ -14,7 +14,7 @@ defmodule Servo.Fetch do
 
     spawn(fn -> send(parent, {self(), :result, f.()}) end)
   end
-  
+
   @doc """
   Gets the result from an async process
   """
