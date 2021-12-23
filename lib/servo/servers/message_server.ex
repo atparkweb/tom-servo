@@ -3,7 +3,7 @@ defmodule Servo.MessageServer do
 
   def start do
     IO.puts "Starting message server..."
-    pid = spawn(__MODULE__, :listen, [[]])
+    pid = spawn(__MODULE__, :listen_loop, [[]])
     Process.register(pid, @process)
     pid
   end
@@ -31,26 +31,32 @@ defmodule Servo.MessageServer do
   end
 
   @doc "Server process loop. State should initially be an empty list."
-  def listen(state) do
+  def listen_loop(state) do
     receive do
-      {pid, {:create_message, name, message}} ->
-        {:ok, id} = save_message(name, message)
-
-        # only track last 3 messages
-        new_state = [ {name, message} | Enum.take(state, 2) ]
-        send pid, {:response, id}
-        listen(new_state)
-      {pid, :recent_messages} ->
-        send pid, {:response, state}
-        listen(state)
-      {pid, :total_messages} ->
-        total = Enum.map(state, &elem(&1, 1)) |> Enum.sum
-        send pid, {:response, total}
-        listen(state)
+      {sender, message} when is_pid(sender) ->
+        {response, new_state} = handle_call(message, state)
+        send sender, {:response, response}
+        listen_loop(new_state)
       unexpected ->
         IO.puts "Unexpected message: #{inspect unexpected}"
-        listen(state)
+        listen_loop(state)
     end
+  end
+
+  def handle_call(:total_messages, state) do
+    total = Enum.map(state, &elem(&1, 1)) |> Enum.sum
+    {total, state}
+  end
+  def handle_call(:recent_messages, state) do
+    {state, state}
+  end
+  def handle_call({:create_message, name, message}, state) do
+    {:ok, id} = save_message(name, message)
+
+    # last 3 messages
+    most_recent = Enum.take(state, 2)
+    new_state = [ {name, message} | most_recent ]
+    {id, new_state}
   end
 end
 
