@@ -3,7 +3,7 @@ defmodule HandlerTest do
 
   import Servo.Handler, only: [handle: 1]
 
-  alias Servo.HttpServer
+  alias Servo.Servers.HttpServer
   alias Servo.HttpClient
 
   def start_server do
