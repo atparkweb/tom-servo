@@ -48,10 +48,6 @@ defmodule Servo.Servers.HttpServer do
   """
   def read_request(client_socket) do
     {:ok, request} = :gen_tcp.recv(client_socket, 0) # all available bytes
-
-    IO.puts " Received request:\n"
-    IO.puts request
-
     request
   end
 
@@ -60,9 +56,6 @@ defmodule Servo.Servers.HttpServer do
   """
   def write_response(response, client_socket) do
     :ok = :gen_tcp.send(client_socket, response)
-
-    IO.puts " Sent response:\n"
-    IO.puts response
 
     # Closes the client socket, ending the connection.
     # Does not close the listen socket!
