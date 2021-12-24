@@ -93,19 +93,19 @@ defmodule Servo.MessageServer do
 
 end
 
-alias Servo.MessageServer
+# alias Servo.MessageServer
 
-{:ok, pid} = MessageServer.start()
+# {:ok, pid} = MessageServer.start()
 
-send pid, {:alert, "Time's up"}
+# send pid, {:alert, "Time's up"}
 
-MessageServer.set_cache_size(4)
+# MessageServer.set_cache_size(4)
 
-IO.inspect MessageServer.create_message("Player 2", "Hello")
-# IO.inspect MessageServer.create_message("Player 2", "Hi")
-# IO.inspect MessageServer.create_message("Player 1", "What's up?")
-# IO.inspect MessageServer.create_message("Player 3", "Hola")
+# IO.inspect MessageServer.create_message("Player 2", "Hello")
+# # IO.inspect MessageServer.create_message("Player 2", "Hi")
+# # IO.inspect MessageServer.create_message("Player 1", "What's up?")
+# # IO.inspect MessageServer.create_message("Player 3", "Hola")
 
-IO.inspect MessageServer.recent_messages()
+# IO.inspect MessageServer.recent_messages()
 
-IO.inspect MessageServer.total_messages()
+# IO.inspect MessageServer.total_messages()
