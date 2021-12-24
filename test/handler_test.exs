@@ -4,10 +4,12 @@ defmodule HandlerTest do
   import Servo.Handler, only: [handle: 1]
 
   alias Servo.Servers.HttpServer
+  alias Servo.Servers.CacheServer
   alias Servo.HttpClient
 
   def start_server do
     spawn(HttpServer, :start, [4000])
+    spawn(CacheServer, :start, [])
   end
 
   test "GET /api-data" do
