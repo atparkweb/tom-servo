@@ -8,15 +8,14 @@ defmodule Servo.Routes do
   alias Servo.Controllers.MessageController
   alias Servo.Request
 
+  alias Servo.Servers.CacheServer
+  alias Servo.Servers.FourOhFourCounter
+
   # simulate an API request
   def route(%Request{ method: "GET", path: "/api-data" } = req) do
-    results =
-      [:one, :two, :three]
-      |> Enum.map(&Task.async(fn -> Api.Client.get_data(&1) end))
-      |> Enum.map(&Task.await(&1, :timer.seconds(7))) # timout after 7 seconds
+    results = CacheServer.get_api_data()
 
     {:ok, res} = Poison.encode(results)
-
     %{ req | status: 200, res_body: res}
   end
 
@@ -26,7 +25,7 @@ defmodule Servo.Routes do
   end
 
   def route(%Request{ method: "GET", path: "/404s" } = req) do
-    counts = Servo.FourOhFourCounter.get_counts()
+    counts = FourOhFourCounter.get_counts()
     %Request{ req | status: 200, res_body: inspect counts }
   end
 
