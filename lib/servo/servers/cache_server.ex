@@ -1,6 +1,5 @@
 defmodule Servo.Servers.CacheServer do
   @name :cache_server
-  @default_refresh_interval :timer.minutes(60)
 
   use GenServer
 
@@ -18,15 +17,16 @@ defmodule Servo.Servers.CacheServer do
     GenServer.call @name, :get_api_data
   end
 
-  def set_refresh_interval(t) do
-    GenServer.cast @name, {:set_refresh_interval, t}
+  def set_refresh_interval(time_in_ms) do
+    GenServer.cast @name, {:set_refresh_interval, time_in_ms}
   end
 
   @impl true
-  def init(_args) do
-    initial_data = run_tasks_to_get_data()
-    schedule_refresh(@default_refresh_interval)
-    {:ok, %{ data: initial_data, refresh_interval: @default_refresh_interval}}
+  def init(state) do
+    data = run_tasks_to_get_data()
+    initial_state = %{ state | data: data }
+    schedule_refresh(state.refresh_interval)
+    {:ok, initial_state}
   end
 
   @impl true
@@ -35,24 +35,26 @@ defmodule Servo.Servers.CacheServer do
   end
 
   @impl true
-  def handle_cast({:set_refresh_interval, t}, _from, state) do
-    {:noreply, %{ state | refresh_interval: t }}
+  def handle_cast({:set_refresh_interval, time_in_ms}, state) do
+    new_state = %{ state | refresh_interval: time_in_ms }
+    {:noreply, new_state}
   end
 
   @impl true
   def handle_info(:refresh, state) do
     IO.puts "Refreshing the cache..."
-    new_data = run_tasks_to_get_data()
+    data = run_tasks_to_get_data()
+    new_state = %{ state | data: data }
     schedule_refresh(state.refresh_interval)
-    {:noreply, %{ state | data: new_data }}
+    {:noreply, new_state}
   end
   def handle_info(unexpected, state) do
     IO.puts "Unexpected message! #{inspect unexpected}"
     {:noreply, state}
   end
 
-  defp schedule_refresh(t) do
-    Process.send_after(self(), :refresh, t)
+  defp schedule_refresh(time_in_ms) do
+    Process.send_after(self(), :refresh, time_in_ms)
   end
 
   defp run_tasks_to_get_data do
