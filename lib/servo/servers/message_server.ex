@@ -36,9 +36,9 @@ defmodule Servo.MessageServer do
   end
 
 
-  # Server callbacks (GenServer behaviour implementations)
+  # Server callbacks
 
-  # init args come from initial state from `start` call
+  @impl true
   def init(state) do
     # setting initial state from backing service data
     messages = fetch_recent_from_service()
@@ -47,6 +47,7 @@ defmodule Servo.MessageServer do
     {:ok, new_state}
   end
 
+  @impl true
   def handle_call(:total_messages, _from, state) do
     total = Enum.count(state.messages)
     {:reply, total, state}
@@ -64,6 +65,7 @@ defmodule Servo.MessageServer do
     {:reply, id, new_state}
   end
 
+  @impl true
   def handle_cast(:clear, state) do
     {:noreply, %{ state | messages: [] }}
   end
@@ -72,6 +74,7 @@ defmodule Servo.MessageServer do
     {:noreply, new_state}
   end
 
+  @impl true
   def handle_info(message, state) do
     IO.puts "Unexpected message! #{inspect message}"
     {:noreply, state}
