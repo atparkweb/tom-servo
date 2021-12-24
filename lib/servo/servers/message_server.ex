@@ -1,4 +1,4 @@
-defmodule Servo.MessageServer do
+defmodule Servo.Servers.MessageServer do
   @name :message_server
 
   use GenServer
