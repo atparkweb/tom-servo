@@ -4,13 +4,13 @@ defmodule HttpServerTest do
   alias Servo.HttpServer
 
   test "accepts a request on a socket and sends back a response" do
-    spawn(HttpServer, :start, [4000])
+    spawn(HttpServer, :start, [4001])
 
     urls = [
-      "http://localhost:4000/bot_crew",
-      "http://localhost:4000/bots",
-      "http://localhost:4000/bots/1",
-      "http://localhost:4000/api/bots"
+      "http://localhost:4001/bot_crew",
+      "http://localhost:4001/bots",
+      "http://localhost:4001/bots/1",
+      "http://localhost:4001/api/bots"
     ]
 
     urls
