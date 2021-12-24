@@ -6,7 +6,7 @@ defmodule FourOhFourCounterTest do
   describe "counts 404 requests" do
 
     setup do
-      pid = Counter.start()
+      {:ok, pid} = Counter.start()
       on_exit(fn ->
         Process.exit(pid, :kill)
       end)
