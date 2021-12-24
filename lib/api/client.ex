@@ -10,8 +10,8 @@ defmodule Api.Client do
       three: "THREE"
     }
 
-    # simulate a 6 second response time
-    :timer.sleep(:timer.seconds(6))
+    # simulate a delayed response time
+    :timer.sleep(:timer.seconds(2))
 
     content[key]
   end
