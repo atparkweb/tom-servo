@@ -70,7 +70,8 @@ defmodule Servo.MessageServer do
     {:noreply, %{ state | messages: [] }}
   end
   def handle_cast({:set_cache_size, size}, state) do
-    new_state = %{ state | cache_size: size }
+    resized_cache = Enum.take(state.messages, size)
+    new_state = %{ state | cache_size: size, messages: resized_cache }
     {:noreply, new_state}
   end
 
