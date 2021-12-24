@@ -28,6 +28,12 @@ defmodule Servo.FourOhFourCounter do
 
   # GenServer Behaviour
 
+  @impl true
+  def init(args) do
+    {:ok, args}
+  end
+
+  @impl true
   def handle_call({:count, path}, _from, state) do
     count = Map.get(state, path)
     {:reply, count, state}
@@ -41,10 +47,12 @@ defmodule Servo.FourOhFourCounter do
     {:reply, count, new_state}
   end
 
+  @impl true
   def handle_cast(:reset, _state) do
     {:noreply, %{}}
   end
 
+  @impl true
   def handle_info(message, state) do
     IO.puts "Unexpected message! #{inspect message}"
     {:noreply, state}
