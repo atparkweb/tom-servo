@@ -1,11 +1,12 @@
 defmodule Servo.Servers.CacheServer do
   @name :cache_server
-  @refresh_interval :timer.seconds(5) # TODO: production -- :timer.minutes(60)
+  @default_refresh_interval :timer.minutes(60)
 
   use GenServer
 
   defmodule State do
-    defstruct data: []
+    defstruct data: [],
+              refresh_interval: :timer.minutes(60)
   end
 
   def start do
@@ -17,11 +18,15 @@ defmodule Servo.Servers.CacheServer do
     GenServer.call @name, :get_api_data
   end
 
+  def set_refresh_interval(t) do
+    GenServer.cast @name, {:set_refresh_interval, t}
+  end
+
   @impl true
   def init(_args) do
-    initial_state = run_tasks_to_get_data()
-    schedule_refresh()
-    {:ok, initial_state}
+    initial_data = run_tasks_to_get_data()
+    schedule_refresh(@default_refresh_interval)
+    {:ok, %{ data: initial_data, refresh_interval: @default_refresh_interval}}
   end
 
   @impl true
@@ -30,15 +35,24 @@ defmodule Servo.Servers.CacheServer do
   end
 
   @impl true
-  def handle_info(:refresh, _state) do
-    IO.puts "Refreshing the cache..."
-    new_data = run_tasks_to_get_data()
-    schedule_refresh()
-    {:noreply, new_data}
+  def handle_cast({:set_refresh_interval, t}, _from, state) do
+    {:noreply, %{ state | refresh_interval: t }}
   end
 
-  defp schedule_refresh() do
-    Process.send_after(self(), :refresh, @refresh_interval)
+  @impl true
+  def handle_info(:refresh, state) do
+    IO.puts "Refreshing the cache..."
+    new_data = run_tasks_to_get_data()
+    schedule_refresh(state.refresh_interval)
+    {:noreply, %{ state | data: new_data }}
+  end
+  def handle_info(unexpected, state) do
+    IO.puts "Unexpected message! #{inspect unexpected}"
+    {:noreply, state}
+  end
+
+  defp schedule_refresh(t) do
+    Process.send_after(self(), :refresh, t)
   end
 
   defp run_tasks_to_get_data do
@@ -49,6 +63,6 @@ defmodule Servo.Servers.CacheServer do
       |> Enum.map(&Task.async(fn -> Api.Client.get_data(&1) end))
       |> Enum.map(&Task.await(&1, :timer.seconds(7)))
 
-    %{ data: results }
+    results
   end
 end
