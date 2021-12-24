@@ -37,7 +37,7 @@ defmodule Servo.FourOhFourCounter do
   end
   def handle_call({:increment, path}, _from, state) do
     new_state = Map.update(state, path, 1, fn c -> c + 1 end)
-    count = Map.get(state, path)
+    count = Map.get(new_state, path)
     {:reply, count, new_state}
   end
 
