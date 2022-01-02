@@ -8,6 +8,11 @@ defmodule Servo.KickStarter do
     GenServer.start(__MODULE__, :ok, name: __MODULE__)
   end
 
+  def start_link(_arg) do
+    IO.puts "Starting kickstarter (supervised)..."
+    GenServer.start_link(__MODULE__, :ok, name: __MODULE__)
+  end
+
   def get_server do
     GenServer.call __MODULE__, :get_server
   end
@@ -33,6 +38,6 @@ defmodule Servo.KickStarter do
 
   defp start_server do
     IO.puts "Starting the HTTP server..."
-    spawn_link(Servo.Servers.HttpServer, :start, [@port])
+    spawn_link(Servo.HttpServer, :start, [@port])
   end
 end

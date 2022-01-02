@@ -1,16 +1,15 @@
-defmodule Servo.ServicesSupervisor do
+defmodule Servo.Supervisor do
   use Supervisor
 
-  def start_link(_arg) do
-    IO.puts "Starting the services supervisor..."
+  def start_link do
+    IO.puts "Starting THE supervisor..."
     Supervisor.start_link(__MODULE__, :ok, name: __MODULE__)
   end
 
-  @impl true
   def init(:ok) do
     children = [
-      Servo.MessageServer,
-      {Servo.CacheServer, 60}
+      Servo.KickStarter,
+      Servo.ServicesSupervisor
     ]
 
     Supervisor.init(children, strategy: :one_for_one)
