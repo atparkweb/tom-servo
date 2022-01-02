@@ -10,7 +10,7 @@ defmodule Servo.ServicesSupervisor do
   def init(:ok) do
     children = [
       Servo.MessageServer,
-      Servo.CacheServer
+      {Servo.CacheServer, 60}
     ]
 
     Supervisor.init(children, strategy: :one_for_one)

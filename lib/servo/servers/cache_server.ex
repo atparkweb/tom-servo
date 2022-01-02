@@ -1,7 +1,7 @@
 defmodule Servo.CacheServer do
   @name :cache_server
 
-  use GenServer
+  use GenServer, restart: :permanent
 
   defmodule State do
     defstruct data: [],
@@ -13,9 +13,10 @@ defmodule Servo.CacheServer do
     GenServer.start(__MODULE__, %State{}, name: @name)
   end
 
-  def start_link(_args) do
-    IO.puts "Starting cache server..."
-    GenServer.start_link(__MODULE__, %State{}, name: @name)
+  def start_link(interval) do
+    refresh = :timer.minutes(interval)
+    IO.puts "Starting cache server with min refresh #{interval} minutes..."
+    GenServer.start_link(__MODULE__, %State{ refresh_interval: refresh}, name: @name)
   end
 
   def get_api_data do

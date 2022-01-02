@@ -1,12 +1,11 @@
 defmodule Servo.MessageServer do
   @name :message_server
 
-  use GenServer
+  use GenServer, restart: :temporary
 
   defmodule State do
     defstruct cache_size: 3, messages: []
   end
-
 
   # Client interface
 
