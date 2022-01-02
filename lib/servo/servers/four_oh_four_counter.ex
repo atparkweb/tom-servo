@@ -1,4 +1,4 @@
-defmodule Servo.Servers.FourOhFourCounter do
+defmodule Servo.FourOhFourCounter do
   @name :four_oh_four_server
 
   use GenServer

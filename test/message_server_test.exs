@@ -1,7 +1,7 @@
 defmodule MessageServerTest do
   use ExUnit.Case
 
-  alias Servo.Servers.MessageServer
+  alias Servo.MessageServer
 
   test "should cache the 3 most recent messages" do
     MessageServer.start()

@@ -8,8 +8,8 @@ defmodule Servo.Routes do
   alias Servo.Controllers.MessageController
   alias Servo.Request
 
-  alias Servo.Servers.CacheServer
-  alias Servo.Servers.FourOhFourCounter
+  alias Servo.CacheServer
+  alias Servo.FourOhFourCounter
 
   # simulate an API request
   def route(%Request{ method: "GET", path: "/api-data" } = req) do

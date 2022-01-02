@@ -1,4 +1,4 @@
-defmodule Servo.Servers.CacheServer do
+defmodule Servo.CacheServer do
   @name :cache_server
 
   use GenServer

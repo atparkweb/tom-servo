@@ -1,7 +1,7 @@
 defmodule FourOhFourCounterTest do
   use ExUnit.Case
 
-  alias Servo.Servers.FourOhFourCounter, as: Counter
+  alias Servo.FourOhFourCounter, as: Counter
 
   describe "counts 404 requests" do
 

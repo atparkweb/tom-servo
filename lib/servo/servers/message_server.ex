@@ -1,4 +1,4 @@
-defmodule Servo.Servers.MessageServer do
+defmodule Servo.MessageServer do
   @name :message_server
 
   use GenServer
@@ -28,7 +28,7 @@ defmodule Servo.Servers.MessageServer do
   end
 
   def create_message(name, message) do
-    GenServer.call @name, {:create_message, name, message} 
+    GenServer.call @name, {:create_message, name, message}
   end
 
   def set_cache_size(size) do

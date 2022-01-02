@@ -1,4 +1,4 @@
-defmodule Servo.Servers.GenericServer do
+defmodule Servo.GenericServer do
   def start(callback_module, initial_state, name) do
     pid = spawn(__MODULE__, :listen_loop, [initial_state, callback_module])
     Process.register(pid, name)
@@ -55,7 +55,7 @@ defmodule Servo.Servers.MessageServerLegacy do
   end
 
   def create_message(name, message) do
-    GenericServer.call @name, {:create_message, name, message} 
+    GenericServer.call @name, {:create_message, name, message}
   end
 
   defp save_message(name, _message) do
@@ -83,4 +83,3 @@ defmodule Servo.Servers.MessageServerLegacy do
     []
   end
 end
-

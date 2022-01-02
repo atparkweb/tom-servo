@@ -1,7 +1,7 @@
 defmodule HttpServerTest do
   use ExUnit.Case
 
-  alias Servo.Servers.HttpServer
+  alias Servo.HttpServer
 
   test "accepts a request on a socket and sends back a response" do
     spawn(HttpServer, :start, [4001])

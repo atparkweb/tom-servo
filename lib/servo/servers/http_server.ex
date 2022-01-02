@@ -1,4 +1,4 @@
-defmodule Servo.Servers.HttpServer do
+defmodule Servo.HttpServer do
   @moduledoc "An HTTP server that uses Erlang's GenTCP library"
 
   @doc """
