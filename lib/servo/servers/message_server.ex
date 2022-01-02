@@ -15,6 +15,11 @@ defmodule Servo.MessageServer do
     GenServer.start(__MODULE__, %State{}, name: @name)
   end
 
+  def start_link(_args) do
+    IO.puts "Starting the message server..."
+    GenServer.start_link(__MODULE__, %State{}, name: @name)
+  end
+
   def recent_messages do
     GenServer.call @name, :recent_messages
   end

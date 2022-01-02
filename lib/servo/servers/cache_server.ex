@@ -13,6 +13,11 @@ defmodule Servo.CacheServer do
     GenServer.start(__MODULE__, %State{}, name: @name)
   end
 
+  def start_link(_args) do
+    IO.puts "Starting cache server..."
+    GenServer.start_link(__MODULE__, %State{}, name: @name)
+  end
+
   def get_api_data do
     GenServer.call @name, :get_api_data
   end
