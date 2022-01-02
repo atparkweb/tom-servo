@@ -35,7 +35,7 @@ end
 defmodule Servo.Servers.MessageServerLegacy do
   @name :message_server_legacy
 
-  alias Servo.Servers.GenericServer
+  alias Servo.GenericServer
 
   def start do
     IO.puts "Starting the message server..."
