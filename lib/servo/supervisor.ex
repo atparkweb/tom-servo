@@ -7,6 +7,7 @@ defmodule Servo.Supervisor do
   end
 
   def init(:ok) do
+    # behind the scenes, child_spec gets called on each child with [] as arguments to start_link
     children = [
       Servo.KickStarter,
       Servo.ServicesSupervisor
