@@ -20,7 +20,8 @@ defmodule Servo.MixProject do
   def application do
     [
       extra_applications: [:logger, :eex],
-      mod: {Servo, []} # define which app callback module to use on startup
+      mod: {Servo, []},
+      env: [port: 3000]
     ]
   end
 

@@ -1,5 +1,4 @@
 defmodule Servo.KickStarter do
-  @port 4000
   @name :http_server
 
   use GenServer
@@ -39,7 +38,8 @@ defmodule Servo.KickStarter do
 
   defp start_server do
     IO.puts "Starting the HTTP server..."
-    pid = spawn_link(Servo.HttpServer, :start, [@port])
+    port = Application.get_env(:servo, :port)
+    pid = spawn_link(Servo.HttpServer, :start, [port])
     Process.register(pid, @name)
     pid
   end
