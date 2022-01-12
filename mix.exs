@@ -19,7 +19,8 @@ defmodule Servo.MixProject do
   # Run "mix help compile.app" to learn about applications.
   def application do
     [
-      extra_applications: [:logger, :eex]
+      extra_applications: [:logger, :eex],
+      mod: {Servo, []} # define which app callback module to use on startup
     ]
   end
 

@@ -1,7 +1,8 @@
 defmodule Servo do
-  alias Servo.HttpServer
+  use Application
 
-  def start(port \\ 4000) do
-    HttpServer.start(port)
+  def start(_type, _args) do
+    IO.puts "Starting the application..."
+    Servo.Supervisor.start_link()
   end
 end
